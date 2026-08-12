@@ -2,8 +2,8 @@ import { useState } from 'react'
 
 function Header({ setFiltroAtivo, onMostrarPerfil }) {
   const [menuAberto, setMenuAberto] = useState(null)
-  const filtros = ["Todos", "Roupa Fem", "Roupa Mas", "Roupa Inf", "Acessórios"]
-  const utensiliosFiltros = ["Xícara", "Almofada"]
+  const filtros = ["Todos", "Chaveiros", "Colecionáveis", "Household", "Educacional"]
+  const utensiliosFiltros = ["Enfeites", "Brincos"]
   const novidades = ["Novidade1" , "Novidade2" , "Novidade3"]
 
   return (
@@ -85,7 +85,7 @@ function Header({ setFiltroAtivo, onMostrarPerfil }) {
                   {utensiliosFiltros.map((filtro) => (
                     <span
                       key={filtro}
-                      onClick={() => { setFiltroAtivo("Acessórios"); setMenuAberto(null) }}
+                      onClick={() => { setFiltroAtivo("Household"); setMenuAberto(null) }}
                       className="text-lg text-[#222] hover:text-[rgb(87,87,117)] cursor-pointer"
                     >
                       {filtro}
