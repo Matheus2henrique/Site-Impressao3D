@@ -1,46 +1,271 @@
+export const generos = [
+  {
+    id: "romance",
+    nome: "Romance",
+    tagline: "Encontros que ficam para sempre no coração.",
+    descricao:
+      "Peças delicadas que celebram grandes histórias de amor. Presentes pensados para quem vive cada capítulo com emoção.",
+    imagem:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShUpIIvldF_e2CicERkNYox_nbvwKSvsa9mN47sEu4WwzF5QnBTPP2tQY&s=10",
+  },
+  {
+    id: "fantasia",
+    nome: "Fantasia",
+    tagline: "Portais para mundos onde tudo é possível.",
+    descricao:
+      "Dragões, castelos e encantamentos impressos em 3D para levar a magia dos livros para dentro da sua casa.",
+    imagem:
+      "https://img.magnific.com/fotos-gratis/uma-porta-que-se-estende-para-o-mundo-da-fantasia_23-2151661315.jpg?semt=ais_hybrid&w=740&q=80",
+  },
+  {
+    id: "suspense",
+    nome: "Suspense",
+    tagline: "Cada detalhe esconde uma pista.",
+    descricao:
+      "Peças sombrias e cheias de mistério para os leitores que amam uma boa trama, um crime e a tensão de cada página.",
+    imagem:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN4tctKkyKUJggyYalKWzUWZDJ6T7QGT8TNBo-CMEimj5ItFqSO0LGmQ0&s=10",
+  },
+]
+
 export const produtos = [
-  { id: 1, nome: "Todos 1", categoria: "Todos", imagem: "https://makerworld.bblmw.com/makerworld/model/US96a577559df93d/design/27b5b242f98b5c78.png?x-oss-process=image/resize,w_1000/format,webpq=tbn:ANd9GcQlR18aYoqG7ttJo7zRahDDT2h-2zR-AEtR9ED2mPuwZA&s" },
-  { id: 2, nome: "Todos 2", categoria: "Todos", imagem: "https://makerworld.bblmw.com/makerworld/model/USaeddb58ff1d3b2/design/f6702c6f6b803c9b.png?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 3, nome: "Todos 3", categoria: "Todos", imagem: "https://makerworld.bblmw.com/makerworld/model/US78694c9bd4fb8/design/0310e40c0008db19.png?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 4, nome: "Todos 4", categoria: "Todos", imagem: "https://makerworld.bblmw.com/makerworld/model/USa0ef00e36555bb/design/df2d4b0e0fc182e3.png?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 5, nome: "Todos 5", categoria: "Todos", imagem: "https://makerworld.bblmw.com/makerworld/model/USbf058d4c267178/design/4bbd36c83527f360.jpg?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 6, nome: "Todos 6", categoria: "Todos", imagem: "https://makerworld.bblmw.com/makerworld/model/DSM00000001280560/design/2025-04-03_9216a2734aba5.jpg?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 7, nome: "Todos 7", categoria: "Todos", imagem: "https://makerworld.bblmw.com/makerworld/model/US36d2291decd9d2/design/2025-12-13_20ffbfef7e5678.jpg?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 8, nome: "Todos 8", categoria: "Todos", imagem: "https://makerworld.bblmw.com/makerworld/model/USc223630363db8/design/5502dc7bcedabd47.jpg?x-oss-process=image/resize,w_1000/format,webp" },
+  // ─────────────────────────── ROMANCE ───────────────────────────
+  {
+    id: 1,
+    nome: "Porta-retrato Coração de Papel",
+    genero: "romance",
+    tipo: "decoracao",
+    preco: 29.9,
+    estoque: 12,
+    permiteUpload: false,
+    descricao:
+      "Um porta-retrato delicado em formato de coração, perfeito para guardar a foto do seu casal favorito ou aquele trecho de livro inesquecível.\n\nAcabamento fosco e bordas suaves, impresso sob demanda com material premium.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/US96a577559df93d/design/27b5b242f98b5c78.png?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 2,
+    nome: "Marca-páginas Beijo de Pétalas",
+    genero: "romance",
+    tipo: "decoracao",
+    preco: 19.9,
+    estoque: 25,
+    permiteUpload: true,
+    descricao:
+      "Marca-páginas floral para marcar o seu romance favorito. Leve, resistente e delicado como um beijo de pétalas.\n\nEnvie o nome ou frase do seu casal favorito para personalizar.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/USaeddb58ff1d3b2/design/f6702c6f6b803c9b.png?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 3,
+    nome: "Suporte de Livros Dois Amantes",
+    genero: "romance",
+    tipo: "decoracao",
+    preco: 59.9,
+    estoque: 8,
+    permiteUpload: false,
+    descricao:
+      "Par de suportes para livros inspirados em um abraço. Mantém a sua coleção em pé e decora a estante com muito romance.\n\nProduzido sob demanda com acabamento de alta qualidade.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/US78694c9bd4fb8/design/0310e40c0008db19.png?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 4,
+    nome: "Chaveiro Poema de Amor",
+    genero: "romance",
+    tipo: "decoracao",
+    preco: 24.9,
+    estoque: 18,
+    permiteUpload: true,
+    descricao:
+      "Um chaveiro com o poema que você escolher, para carregar um pedacinho da sua história por onde for.\n\nPersonalize com o nome do casal ou um verso especial.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/USa0ef00e36555bb/design/df2d4b0e0fc182e3.png?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 5,
+    nome: "Colecionável Casal de Capa",
+    genero: "romance",
+    tipo: "colecionavel",
+    preco: 89.9,
+    estoque: 5,
+    permiteUpload: false,
+    descricao:
+      "Figura colecionável inspirada nos casais de romance que marcaram gerações. Peça montada à mão, com riqueza de detalhes.\n\nEdição limitada impressa sob demanda.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/USbf058d4c267178/design/4bbd36c83527f360.jpg?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 6,
+    nome: "Colecionável Herói do Livro",
+    genero: "romance",
+    tipo: "colecionavel",
+    preco: 79.9,
+    estoque: 6,
+    permiteUpload: false,
+    descricao:
+      "Representação em miniatura do herói perfeito de romance. Perfeita para estantes de leitores apaixonados.\n\nPeça única, montada e revisada manualmente.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/DSM00000001280560/design/2025-04-03_9216a2734aba5.jpg?x-oss-process=image/resize,w_1000/format,webp",
+  },
 
-  { id: 9, nome: "Chaveiros 1", categoria: "Chaveiros", imagem: "https://makerworld.bblmw.com/makerworld/model/US57133f4695901/design/0bef49986735aefb.png?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 10, nome: "Chaveiros 2", categoria: "Chaveiros", imagem: "https://makerworld.bblmw.com/makerworld/model/USaf0c13cbb31f72/design/076614235431c78f.png?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 11, nome: "Chaveiros 3", categoria: "Chaveiros", imagem: "https://makerworld.bblmw.com/makerworld/model/US325acace30dc32/design/30c308e35c4d8001.jpg?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 12, nome: "Chaveiros 4", categoria: "Chaveiros", imagem: "https://makerworld.bblmw.com/makerworld/model/USea5cf9cb2d0057/design/2025-01-23_9d59945f3212d8.jpg?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 13, nome: "Chaveiros 5", categoria: "Chaveiros", imagem: "https://makerworld.bblmw.com/makerworld/model/US8de3b13806c2c9/design/bb3b350bac10ca6f.jpg?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 14, nome: "Chaveiros 6", categoria: "Chaveiros", imagem: "https://makerworld.bblmw.com/makerworld/model/US660a1afacbd418/design/66542ca4cf112e11.jpg?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 15, nome: "Chaveiros 7", categoria: "Chaveiros", imagem: "https://makerworld.bblmw.com/makerworld/model/USce6c634b57ba37/design/2026-01-16_b49796237ceeb8.jpg?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 16, nome: "Chaveiros 8", categoria: "Chaveiros", imagem: "https://makerworld.bblmw.com/makerworld/model/US945c1d3206b829/design/2025-10-06_57df5fe2299b1.png?x-oss-process=image/resize,w_1000/format,webp" },
+  // ─────────────────────────── FANTASIA ───────────────────────────
+  {
+    id: 7,
+    nome: "Marca-páginas Porta dos Mundos",
+    genero: "fantasia",
+    tipo: "decoracao",
+    preco: 19.9,
+    estoque: 20,
+    permiteUpload: true,
+    descricao:
+      "Marca-páginas com uma porta encantada, para guardar o lugar exato onde você entrou em outro universo.\n\nPersonalize com o nome do seu reino favorito.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/US36d2291decd9d2/design/2025-12-13_20ffbfef7e5678.jpg?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 8,
+    nome: "Suporte Dragão Guardião",
+    genero: "fantasia",
+    tipo: "decoracao",
+    preco: 69.9,
+    estoque: 7,
+    permiteUpload: false,
+    descricao:
+      "Suporte para livros esculpido em forma de dragão, guardião das suas histórias épicas.\n\nAcabamento detalhado que honra os grandes mundos da fantasia.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/USc223630363db8/design/5502dc7bcedabd47.jpg?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 9,
+    nome: "Luminária Castelo Encantado",
+    genero: "fantasia",
+    tipo: "decoracao",
+    preco: 89.9,
+    estoque: 4,
+    permiteUpload: false,
+    descricao:
+      "Luminária decorativa em forma de castelo que projeta silhuetas mágicas no ambiente. Ideal para criar a atmosfera perfeita de leitura.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/US57133f4695901/design/0bef49986735aefb.png?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 10,
+    nome: "Chaveiro Varinha Mágica",
+    genero: "fantasia",
+    tipo: "decoracao",
+    preco: 27.9,
+    estoque: 15,
+    permiteUpload: true,
+    descricao:
+      "Chaveiro em forma de varinha para quem acredita que um gesto pode mudar tudo.\n\nEnvie o símbolo ou iniciais para personalizar a varinha.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/USaf0c13cbb31f72/design/076614235431c78f.png?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 11,
+    nome: "Colecionável Dragão dos Ventos",
+    genero: "fantasia",
+    tipo: "colecionavel",
+    preco: 129.9,
+    estoque: 3,
+    permiteUpload: false,
+    descricao:
+      "Dragão colecionável com asas abertas em pleno voo. Montado à mão, peça por peça, para impressionar qualquer colecionador.\n\nEdição especial impressa sob demanda.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/US325acace30dc32/design/30c308e35c4d8001.jpg?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 12,
+    nome: "Colecionável Elfa das Estrelas",
+    genero: "fantasia",
+    tipo: "colecionavel",
+    preco: 109.9,
+    estoque: 4,
+    permiteUpload: false,
+    descricao:
+      "Figura de elfa com detalhes minuciosos, pensada para iluminar a estante com magia.\n\nProduzida sob demanda com pintura artesanal opcional.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/USea5cf9cb2d0057/design/2025-01-23_9d59945f3212d8.jpg?x-oss-process=image/resize,w_1000/format,webp",
+  },
 
-  { id: 17, nome: "Colecionáveis 1", categoria: "Colecionáveis", imagem: "https://makerworld.bblmw.com/makerworld/model/USda26b21dce8265/design/68391dfd2b7da5a0.jpeg?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 18, nome: "Colecionáveis 2", categoria: "Colecionáveis", imagem: "https://makerworld.bblmw.com/makerworld/model/US8651ad5579c5d6/design/f6ac4cf7d1119274.png?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 19, nome: "Colecionáveis 3", categoria: "Colecionáveis", imagem: "https://makerworld.bblmw.com/makerworld/model/DSM00000001154827/design/2025-02-26_2359a0f33a46.jpg?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 20, nome: "Colecionáveis 4", categoria: "Colecionáveis", imagem: "https://makerworld.bblmw.com/makerworld/model/USb4499f8b5da9a/design/79bf283a7be28b4a.png?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 21, nome: "Colecionáveis 5", categoria: "Colecionáveis", imagem: "https://makerworld.bblmw.com/makerworld/model/USdd8ae3a0e9baad/design/2025-09-01_a92fd1c2501f98.jpg?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 22, nome: "Colecionáveis 6", categoria: "Colecionáveis", imagem: "https://makerworld.bblmw.com/makerworld/model/USbc421a60ea4f91/design/7aff5ae9fdeb0e3d.png?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 23, nome: "Colecionáveis 7", categoria: "Colecionáveis", imagem: "https://makerworld.bblmw.com/makerworld/model/USfc6a0e4e62da5e/design/895351db29b1a2cb.jpeg?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 24, nome: "Colecionáveis 8", categoria: "Colecionáveis", imagem: "https://makerworld.bblmw.com/makerworld/model/USd81bac752dabf1/design/9bf20155b345c100.png?x-oss-process=image/resize,w_1000/format,webp" },
-
-  { id: 25, nome: "Household 1", categoria: "Household", imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJK9w6FNTMKP-WVmG7VAGoiDuWcaQ9BPIAJDPf0BF58RbzlJgC1CDut30e&s=10" },
-  { id: 26, nome: "Household 2", categoria: "Household", imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX1EBgXI9BffykwY9qEoSpKrZrlR1clfmTRHGwcb65g_JpMHyi7HBglt8&s=10" },
-  { id: 27, nome: "Household 3", categoria: "Household", imagem: "https://i.pinimg.com/736x/58/ce/a6/58cea691c5da81e9bf101ea058ff0656.jpg" },
-  { id: 28, nome: "Household 4", categoria: "Household", imagem: "https://makerworld.bblmw.com/makerworld/model/USf9b16aa22da91a/design/c2e9cae1fed538b9.jpeg?x-oss-process=image/resize,w_1000/format,webp" },
-  { id: 29, nome: "Household 5", categoria: "Household", imagem: "https://makerworld.bblmw.com/makerworld/model/USc853c799324fe1/design/84a005c55a075c44.png?x-oss-process=image/resize,w_400/format,webp" },
-  { id: 30, nome: "Household 6", categoria: "Household", imagem: "https://makerworld.bblmw.com/makerworld/model/US7165a2b1a70007/design/fd3b0433592cc187.jpeg?x-oss-process=image/resize,w_400/format,webp" },
-  { id: 31, nome: "Household 7", categoria: "Household", imagem: "https://makerworld.bblmw.com/makerworld/model/US731e3cd466596a/design/c58fa2aa39638c86.png?x-oss-process=image/resize,w_400/format,webp" },
-  { id: 32, nome: "Household 8", categoria: "Household", imagem: "https://makerworld.bblmw.com/makerworld/model/US6914a07a994357/design/4a6b747228736a8e.png?x-oss-process=image/resize,w_400/format,webp" },
-
-  { id: 33, nome: "Educacional 1", categoria: "Educacional", imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiVvFWt5wFENWVkEeCI7gx04d30a1_7TfIwIjnrKmVqqIwV4d_3j34QQo&s=10" },
-  { id: 34, nome: "Educacional 2", categoria: "Educacional", imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt9Klx541mHWzFHlN6cG-tdvLkuBM1TQ-lvCNlqm7NQVpZTDLNk_kLNt7b&s=10" },
-  { id: 35, nome: "Educacional 3", categoria: "Educacional", imagem: "https://iatzar3d.com.br/wp-content/uploads/2023/02/Modelo-DNA.jpg.webp" },
-  { id: 36, nome: "Educacional 4", categoria: "Educacional", imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwkpy_KggrLakpx-40BLXz8kx_EoBqHGqqg3ExZtaibc7pL7wRfn3SjXFw&s=10" },
-  { id: 37, nome: "Educacional 5", categoria: "Educacional", imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9SV-OPiXS9d0f1_95Pz9APgp7R6bDoC7fuMWl9rly9qYEarSUPoVgKYE&s=10" },
-  { id: 38, nome: "Educacional 6", categoria: "Educacional", imagem: "https://www.ifg.edu.br/attachments/article/37113/19.12.2023%20-%20Projeto%20de%20ensino%20Produ%C3%A7%C3%A3o%20Mat%203d%20Bio_Interna_Materiais.jpg" },
-  { id: 39, nome: "Educacional 7", categoria: "Educacional", imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6mE5qmQgdWHrQDKTKVTLvBOUMfKmzHmvldCOK_kT10B47vLJsqYxMlG0&s=10" },
-  { id: 40, nome: "Educacional 8", categoria: "Educacional", imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpiChM29davAySYcLvZ5FfQhVOlOut6j-9EtncnBg-1o6VCpDeKbjn6iQ&s=10" }
+  // ─────────────────────────── SUSPENSE ───────────────────────────
+  {
+    id: 13,
+    nome: "Marca-páginas Olho do Detetive",
+    genero: "suspense",
+    tipo: "decoracao",
+    preco: 21.9,
+    estoque: 22,
+    permiteUpload: true,
+    descricao:
+      "Marca-páginas sombrio em formato de olho, que nunca perde uma pista da sua trama favorita.\n\nPersonalize com uma frase de impacto ou iniciais.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/US8de3b13806c2c9/design/bb3b350bac10ca6f.jpg?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 14,
+    nome: "Suporte Cofre Mistério",
+    genero: "suspense",
+    tipo: "decoracao",
+    preco: 74.9,
+    estoque: 6,
+    permiteUpload: false,
+    descricao:
+      "Suporte de livros em formato de cofre, guardando segredos e as histórias mais sombrias da sua estante.\n\nAcabamento robusto e discreto.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/US660a1afacbd418/design/66542ca4cf112e11.jpg?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 15,
+    nome: "Luminária Lua de Crime",
+    genero: "suspense",
+    tipo: "decoracao",
+    preco: 94.9,
+    estoque: 4,
+    permiteUpload: false,
+    descricao:
+      "Luminária em forma de lua que projeta uma luz de mistério sobre o seu canto de leitura noturno.\n\nPerfeita para criar o clima de uma noite chuvosa de investigação.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/USce6c634b57ba37/design/2026-01-16_b49796237ceeb8.jpg?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 16,
+    nome: "Chaveiro Pegada Escura",
+    genero: "suspense",
+    tipo: "decoracao",
+    preco: 26.9,
+    estoque: 14,
+    permiteUpload: true,
+    descricao:
+      "Um chaveiro com a pegada que ninguém conseguiu explicar. Leve a investigação com você.\n\nPersonalize com o número do seu caso ou uma sigla.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/US945c1d3206b829/design/2025-10-06_57df5fe2299b1.png?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 17,
+    nome: "Colecionável Detetive Noir",
+    genero: "suspense",
+    tipo: "colecionavel",
+    preco: 139.9,
+    estoque: 3,
+    permiteUpload: false,
+    descricao:
+      "Figura de detetive em estilo noir, com sobretudo e chapéu, pronta para resolver o caso.\n\nMontada à mão com acabamento fosco premium.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/USda26b21dce8265/design/68391dfd2b7da5a0.jpeg?x-oss-process=image/resize,w_1000/format,webp",
+  },
+  {
+    id: 18,
+    nome: "Colecionável Sombra da Meia-Noite",
+    genero: "suspense",
+    tipo: "colecionavel",
+    preco: 119.9,
+    estoque: 4,
+    permiteUpload: false,
+    descricao:
+      "Figura sombria que aparece nos corredores das grandes histórias de suspense. Peça exclusiva para colecionadores.\n\nProduzida sob demanda e revisada manualmente.",
+    imagem:
+      "https://makerworld.bblmw.com/makerworld/model/US8651ad5579c5d6/design/f6ac4cf7d1119274.png?x-oss-process=image/resize,w_1000/format,webp",
+  },
 ]

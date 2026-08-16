@@ -1,64 +1,245 @@
 import { useState, useEffect } from 'react'
 import Header from './components/Header'
-import Banner from './components/Banner'
-import Catalogo from './components/Catalogo'
+import Footer from './components/Footer'
+import Entrada from './components/Entrada'
+import Genero from './components/Genero'
+import ClubeLocus from './components/ClubeLocus'
 import ProdutoDetalhe from './components/ProdutoDetalhe'
 import Perfil from './components/Perfil'
+import Favoritos from './components/Favoritos'
+import CarrinhoDrawer from './components/Carrinho'
+import { generos, produtos } from './data/produtos'
+
+const BASE = '/locus'
+
+function rotaParaURL({ generoId, pagina, produtoSelecionado, mostrarPerfil, mostrarFavoritos }) {
+  if (mostrarPerfil) return `${BASE}/login`
+  if (mostrarFavoritos) return `${BASE}/favoritos`
+  if (pagina === 'clube') return `${BASE}/clube`
+  if (pagina === 'detalhe' && produtoSelecionado && generoId)
+    return `${BASE}/${generoId}/produto/${produtoSelecionado.id}`
+  if (pagina === 'genero' && generoId) return `${BASE}/${generoId}`
+  return `${BASE}`
+}
+
+function URLparaEstado(pathname) {
+  const partes = pathname.replace(BASE, '').split('/').filter(Boolean)
+
+  if (partes[0] === 'login') return { pagina: 'entrada', mostrarPerfil: true }
+  if (partes[0] === 'favoritos') return { pagina: 'entrada', mostrarFavoritos: true }
+  if (partes[0] === 'clube') return { pagina: 'clube' }
+  if (partes[0] === 'produto') {
+    const produto = produtos.find((p) => p.id === Number(partes[1]))
+    if (produto) return { pagina: 'detalhe', generoId: produto.genero, produtoSelecionado: produto }
+  }
+  if (partes[0] && partes[1] === 'produto') {
+    const generoId = generos.some((g) => g.id === partes[0]) ? partes[0] : null
+    const produto = produtos.find((p) => p.id === Number(partes[2]) && p.genero === generoId)
+    if (produto) return { pagina: 'detalhe', generoId, produtoSelecionado: produto }
+  }
+  if (generos.some((g) => g.id === partes[0])) return { pagina: 'genero', generoId: partes[0] }
+
+  return { pagina: 'entrada', generoId: null }
+}
 
 function App() {
+  const [generoId, setGeneroId] = useState(null)
+  const [pagina, setPagina] = useState('entrada') // entrada | genero | clube | detalhe
   const [produtoSelecionado, setProdutoSelecionado] = useState(null)
-  const [filtroAtivo, setFiltroAtivo] = useState("Todos")
-  const [deveRolarCatalogo, setDeveRolarCatalogo] = useState(false)
   const [mostrarPerfil, setMostrarPerfil] = useState(false)
+  const [mostrarFavoritos, setMostrarFavoritos] = useState(false)
+  const [favoritos, setFavoritos] = useState([])
+  const [carrinho, setCarrinho] = useState([])
+  const [mostrarCarrinho, setMostrarCarrinho] = useState(false)
 
-  const handleFiltroChange = (filtro) => {
-    setFiltroAtivo(filtro);
-    setProdutoSelecionado(null);
-    setDeveRolarCatalogo(true);
-  };
+  const genero = generos.find((g) => g.id === generoId)
 
-  useEffect(() => {
-    if (deveRolarCatalogo) {
-      document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth' });
-      setDeveRolarCatalogo(false);
-    }
-  }, [deveRolarCatalogo, filtroAtivo]);
-
-  function handleMostrarPerfil() {
-    setProdutoSelecionado(null)
-    setMostrarPerfil(true)
+  function navegar(estado) {
+    const proximo = { ...estado }
+    setGeneroId(proximo.generoId ?? null)
+    setPagina(proximo.pagina ?? 'entrada')
+    setProdutoSelecionado(proximo.produtoSelecionado ?? null)
+    setMostrarPerfil(Boolean(proximo.mostrarPerfil))
+    setMostrarFavoritos(Boolean(proximo.mostrarFavoritos))
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.history.pushState(null, '', rotaParaURL(proximo))
   }
 
-  function handleVoltarDoPerfil() {
-    setMostrarPerfil(false)
-    setDeveRolarCatalogo(true)
+  useEffect(() => {
+    function sincronizar() {
+      const estado = URLparaEstado(window.location.pathname)
+      setGeneroId(estado.generoId ?? null)
+      setPagina(estado.pagina ?? 'entrada')
+      setProdutoSelecionado(estado.produtoSelecionado ?? null)
+      setMostrarPerfil(Boolean(estado.mostrarPerfil))
+      setMostrarFavoritos(Boolean(estado.mostrarFavoritos))
+    }
+    sincronizar()
+    window.addEventListener('popstate', sincronizar)
+    return () => window.removeEventListener('popstate', sincronizar)
+  }, [])
+
+  function handleSelecionarGenero(id) {
+    navegar({ generoId: id, pagina: 'genero' })
+  }
+
+  function handleVoltarHome() {
+    navegar({ generoId: null, pagina: 'entrada' })
   }
 
   function handleSelecionarProduto(produto) {
-    setProdutoSelecionado(produto)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    navegar({ generoId: produto.genero, pagina: 'detalhe', produtoSelecionado: produto })
   }
 
+  function handleAssinar() {
+    navegar({ pagina: 'clube' })
+  }
+
+  function handleMostrarPerfil() {
+    navegar({ pagina: 'entrada', mostrarPerfil: true })
+  }
+
+  function handleMostrarFavoritos() {
+    navegar({ pagina: 'entrada', mostrarFavoritos: true })
+  }
+
+  function handleVoltarFavoritos() {
+    navegar({ pagina: 'entrada' })
+  }
+
+  function toggleFavorito(produto) {
+    setFavoritos((atual) =>
+      atual.some((item) => item.id === produto.id)
+        ? atual.filter((item) => item.id !== produto.id)
+        : [...atual, produto]
+    )
+  }
+
+  function handleVoltarDoPerfil() {
+    navegar({ pagina: 'entrada' })
+  }
+
+  function voltarParaGenero() {
+    navegar({ generoId, pagina: 'genero' })
+  }
+
+  function handleAdicionarAoCarrinho(produto, quantidade = 1) {
+    setCarrinho((atual) => {
+      const existente = atual.find((item) => item.produto.id === produto.id)
+      if (existente) {
+        return atual.map((item) =>
+          item.produto.id === produto.id
+            ? { ...item, quantidade: item.quantidade + quantidade }
+            : item
+        )
+      }
+      return [...atual, { produto, quantidade }]
+    })
+    setMostrarCarrinho(true)
+  }
+
+  function handleRemoverDoCarrinho(id) {
+    setCarrinho((atual) => atual.filter((item) => item.produto.id !== id))
+  }
+
+  function handleAlterarQuantidade(id, delta) {
+    setCarrinho((atual) =>
+      atual
+        .map((item) =>
+          item.produto.id === id
+            ? { ...item, quantidade: item.quantidade + delta }
+            : item
+        )
+        .filter((item) => item.quantidade > 0)
+    )
+  }
+
+  function handleFecharCarrinho() {
+    setMostrarCarrinho(false)
+  }
+
+  function handleIrParaDestaques() {
+    navegar({ generoId: null, pagina: 'entrada' })
+    setTimeout(() => {
+      document.getElementById('destaques')?.scrollIntoView({ behavior: 'smooth' })
+    }, 60)
+  }
+
+  const totalCarrinho = carrinho.reduce((soma, item) => soma + item.quantidade, 0)
+  const temaClasse = generoId ? `tema-${generoId}` : ''
+
   return (
-    <div className="w-full">
-      <Header filtroAtivo={filtroAtivo} setFiltroAtivo={handleFiltroChange} onMostrarPerfil={handleMostrarPerfil} />
-      {mostrarPerfil ? (
+    <div className={`w-full min-h-screen flex flex-col pt-[64px] md:pt-[90px] ${temaClasse}`} style={{ background: 'var(--cor-fundo)' }}>
+      <Header
+        generoId={generoId}
+        onSelecionarGenero={handleSelecionarGenero}
+        onHome={handleVoltarHome}
+        onAssinar={handleAssinar}
+        onMostrarPerfil={handleMostrarPerfil}
+        totalCarrinho={totalCarrinho}
+        onMostrarCarrinho={() => setMostrarCarrinho(true)}
+        totalFavoritos={favoritos.length}
+        onMostrarFavoritos={handleMostrarFavoritos}
+      />
+
+      {mostrarFavoritos ? (
+        <Favoritos
+          favoritos={favoritos}
+          onVoltar={handleVoltarFavoritos}
+          onSelecionarProduto={handleSelecionarProduto}
+          onToggleFavorito={toggleFavorito}
+        />
+      ) : mostrarPerfil ? (
         <Perfil onVoltar={handleVoltarDoPerfil} />
-      ) : !produtoSelecionado ? (
-        <>
-          <Banner />
-          <Catalogo onSelecionarProduto={handleSelecionarProduto} filtroAtivo={filtroAtivo} setFiltroAtivo={setFiltroAtivo} />
-        </>
-      ) : (
+      ) : pagina === 'detalhe' && produtoSelecionado ? (
         <ProdutoDetalhe
           produto={produtoSelecionado}
-          onVoltar={() => setProdutoSelecionado(null)}
+          onVoltar={voltarParaGenero}
           onSelecionar={handleSelecionarProduto}
+          onAssinar={handleAssinar}
+          onAdicionarAoCarrinho={handleAdicionarAoCarrinho}
+          noCarrinho={carrinho.some((item) => item.produto.id === produtoSelecionado.id)}
+          favoritos={favoritos}
+          onToggleFavorito={toggleFavorito}
+        />
+      ) : pagina === 'clube' ? (
+        <ClubeLocus genero={genero} onVoltar={voltarParaGenero} />
+      ) : pagina === 'genero' && genero ? (
+        <Genero
+          genero={genero}
+          onSelecionarProduto={handleSelecionarProduto}
+          onAssinar={handleAssinar}
+          favoritos={favoritos}
+          onToggleFavorito={toggleFavorito}
+        />
+      ) : (
+        <Entrada
+          onSelecionarGenero={handleSelecionarGenero}
+          onAssinar={handleAssinar}
+          onSelecionarProduto={handleSelecionarProduto}
+          favoritos={favoritos}
+          onToggleFavorito={toggleFavorito}
+        />
+      )}
+
+      <CarrinhoDrawer
+        itens={carrinho}
+        aberto={mostrarCarrinho}
+        onFechar={handleFecharCarrinho}
+        onRemover={handleRemoverDoCarrinho}
+        onAlterar={handleAlterarQuantidade}
+      />
+
+      {!mostrarPerfil && !mostrarFavoritos && (
+        <Footer
+          onHome={handleVoltarHome}
+          onSelecionarGenero={handleSelecionarGenero}
+          onAssinar={handleAssinar}
+          onIrParaDestaques={handleIrParaDestaques}
         />
       )}
     </div>
-  );
+  )
 }
 
 export default App

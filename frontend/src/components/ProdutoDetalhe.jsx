@@ -1,234 +1,247 @@
 import { useState } from 'react'
 import Card from './Card'
-import { produtos } from '../data/produtos'
+import { generos, produtos } from '../data/produtos'
 import {
   Estrela,
-  Coracao,
-  Download,
-  Olho,
   Carrinho,
   Check,
-  Impressora,
+  SetaEsquerda,
+  Download,
   Relogio,
   Camada,
-  SetaEsquerda
 } from './Icones'
 
-const PRECOS = {
-  Chaveiros: 19.9,
-  Colecionáveis: 49.9,
-  Household: 59.9,
-  Educacional: 79.9,
-  Todos: 34.9
-}
+function ProdutoDetalhe({ produto, onVoltar, onSelecionar, onAssinar, onAdicionarAoCarrinho, noCarrinho, favoritos, onToggleFavorito }) {
+  const [quantidade, setQuantidade] = useState(1)
+  const [arquivo, setArquivo] = useState(null)
 
-const INFORMACOES = {
-  Chaveiros: {
-    descricao:
-      'Chaveiro impresso em 3D com impressão em alta resolução, ideal para presentear ou para uso pessoal no dia a dia.\n\nLeve, resistente e com acabamento detalhado que valoriza qualquer chaveiro, bolsa ou mochila. Personalize cores e detalhes do jeito que você imaginar.',
-    specs: { material: 'PLA+ premium', cor: 'Multicolor', altura: '3 cm', tempo: '1h 30min', pecas: '2 peças' }
-  },
-  Colecionáveis: {
-    descricao:
-      'Figura colecionável impressa em 3D, pensada para quem valoriza arte e detalhes. As peças são impressas separadamente e montadas à mão para um acabamento impecável.\n\nPerfeita para estantes, mesas de trabalho ou como presente especial. Cada detalhe é cuidadosamente reproduzido para encantar colecionadores.',
-    specs: { material: 'PLA+ premium', cor: 'Multicolor', altura: '12 cm', tempo: '6h 40min', pecas: '6 peças' }
-  },
-  Household: {
-    descricao:
-      'Item decorativo e utilitário para o dia a dia da casa, impresso em 3D com materiais duráveis e acabamento limpo.\n\nUne funcionalidade e estilo para transformar o ambiente, mantendo a qualidade superior da impressão tridimensional',
-    specs: { material: 'PETG', cor: '1 ou multicolor', altura: '18 cm', tempo: '5h 20min', pecas: '3 peças' }
-  },
-  Educacional: {
-    descricao:
-      'Material educativo criado para tornar o aprendizado visual e interativo. Recurso didático impresso em 3D com precisão, perfeito para escolas, estudos e demonstrações.\n\nEstimula a curiosidade e facilita a compreensão de conceitos de forma tátil e envolvente.',
-    specs: { material: 'PLA+ premium', cor: 'Uma cor', altura: '10 cm', tempo: '2h 50min', pecas: '1 peça' }
-  },
-  Todos: {
-    descricao:
-      'Modelo exclusivo impresso em 3D com acabamento de alta qualidade. Cada peça é produzida sob demanda e pode ser personalizada conforme a sua preferência de cores, tamanho e detalhes.\n\nTransforme sua ideia em um objeto real, feito especialmente para você.',
-    specs: { material: 'PLA+ premium', cor: 'Multicolor', altura: '8 cm', tempo: '4h', pecas: '3 peças' }
+  const genero = generos.find((g) => g.id === produto.genero)
+  const relacionados = produtos
+    .filter((p) => p.genero === produto.genero && p.id !== produto.id)
+    .slice(0, 4)
+
+  const precoTotal = produto.preco * quantidade
+  const esgotado = produto.estoque <= 0
+
+  function aumentar() {
+    if (quantidade < produto.estoque) setQuantidade(quantidade + 1)
   }
-}
 
-function formatar(n) {
-  return n >= 1000 ? `${(n / 1000).toFixed(1).replace('.', ',')} mil` : String(n)
-}
+  function diminuir() {
+    if (quantidade > 1) setQuantidade(quantidade - 1)
+  }
 
-function StatItem({ icon, value, label }) {
-  return (
-    <div className="flex flex-col items-center gap-1">
-      <div className="flex items-center gap-2 text-[#13233c]">
-        {icon}
-        <span className="text-lg font-bold text-[#13233c]">{value}</span>
-      </div>
-      <span className="text-xs text-[#888]">{label}</span>
-    </div>
-  )
-}
-
-function SpecCard({ icon, label, value }) {
-  return (
-    <div className="flex items-center gap-3 bg-[#f7f6f3] rounded-xl px-4 py-3">
-      <span className="text-[#13233c]">{icon}</span>
-      <div>
-        <p className="text-xs text-[#888]">{label}</p>
-        <p className="text-sm font-semibold text-[#13233c]">{value}</p>
-      </div>
-    </div>
-  )
-}
-
-function ProdutoDetalhe({ produto, onVoltar, onSelecionar }) {
-  const [seguindo, setSeguindo] = useState(false)
-  const [noCarrinho, setNoCarrinho] = useState(false)
-
-  const info = INFORMACOES[produto.categoria] || INFORMACOES.Todos
-  const preco = PRECOS[produto.categoria] ?? PRECOS.Todos
-
-  const likes = (produto.id * 173) % 8000 + 150
-  const downloads = (produto.id * 97) % 5000 + 300
-  const salvos = (produto.id * 61) % 2000 + 80
-  const avaliacoes = (produto.id * 31) % 40 + 2
-  const avaliacao = (3.5 + ((produto.id * 7) % 15) / 10).toFixed(1).replace('.', ',')
-
-  const mesmos = produtos.filter((p) => p.id !== produto.id && p.categoria === produto.categoria)
-  const outros = produtos.filter((p) => p.id !== produto.id && p.categoria !== produto.categoria)
-  const relacionados = [...mesmos, ...outros].slice(0, 4)
-
-  const tags = [produto.categoria, 'impressao3d', 'personalizado', 'sob-demanda']
+  function handleArquivo(e) {
+    const file = e.target.files?.[0]
+    if (file) setArquivo(file)
+  }
 
   return (
-    <section className="min-h-screen bg-[#f7f6f3] py-10">
+    <section className="min-h-screen py-10" style={{ background: 'var(--cor-fundo-suave)' }}>
       <div className="max-w-[1200px] mx-auto px-6">
         <button
           onClick={onVoltar}
-          className="flex items-center gap-2 text-[#13233c] text-base font-medium cursor-pointer hover:underline"
+          className="flex items-center gap-2 text-base font-medium cursor-pointer hover:underline border-none bg-transparent"
+          style={{ color: 'var(--cor-primaria)' }}
         >
           <SetaEsquerda className="w-5 h-5" />
-          Voltar ao catálogo
+          Voltar para {genero?.nome}
         </button>
 
         <div className="mt-8 flex flex-col lg:flex-row gap-10">
           <div className="flex-1">
-            <div className="bg-white rounded-[18px] p-4 shadow-[0_6px_18px_rgba(0,0,0,0.08)]">
-              <div className="relative overflow-hidden rounded-[14px] bg-[#f0efe9]">
-                <img
-                  src={produto.imagem}
-                  alt={produto.nome}
-                  className="w-full h-[440px] object-cover"
-                />
-                <span className="absolute bottom-4 right-4 bg-[#13233c]/90 text-white text-xs px-3 py-1.5 rounded-full">
-                  Foto do modelo
+            <div
+              className="rounded-[18px] p-4"
+              style={{ background: 'var(--cor-fundo-cartao)', border: '1px solid var(--cor-borda)' }}
+            >
+              <div className="relative overflow-hidden rounded-[14px]"
+                style={{ background: 'var(--cor-fundo-suave)' }}
+              >
+                <img src={produto.imagem} alt={produto.nome} className="w-full h-[320px] md:h-[440px] object-cover" />
+                <span
+                  className="absolute bottom-4 right-4 text-white text-xs px-3 py-1.5 rounded-full"
+                  style={{ background: 'var(--cor-primaria)' }}
+                >
+                  {produto.tipo === 'colecionavel' ? 'Colecionável' : 'Decoração avulsa'}
                 </span>
               </div>
-            </div>
-
-            <div className="mt-4 bg-white rounded-[18px] px-6 py-5 flex items-center justify-around shadow-[0_6px_18px_rgba(0,0,0,0.08)]">
-              <StatItem icon={<Download className="w-5 h-5" />} value={formatar(downloads)} label="Downloads" />
-              <StatItem icon={<Coracao className="w-5 h-5" />} value={formatar(likes)} label="Curtidas" />
-              <StatItem icon={<Olho className="w-5 h-5" />} value={formatar(salvos)} label="Salvamentos" />
-              <StatItem icon={<Estrela className="w-5 h-5" />} value={avaliacao} label={`${avaliacoes} avaliações`} />
             </div>
           </div>
 
           <div className="lg:w-[400px]">
-            <nav className="text-sm text-[#888]">
-              <span>{produto.categoria}</span>
+            <nav className="text-sm" style={{ color: 'var(--cor-texto-suave)' }}>
+              <span>{genero?.nome}</span>
               <span className="mx-2">/</span>
-              <span className="text-[#13233c] font-medium">{produto.nome}</span>
+              <span className="font-medium" style={{ color: 'var(--cor-texto)' }}>
+                {produto.nome}
+              </span>
             </nav>
 
-            <h1 className="mt-3 text-4xl font-[Georgia,serif] text-[#13233c] leading-tight">{produto.nome}</h1>
+            <h1 className="mt-3 text-4xl font-[Georgia,serif] leading-tight" style={{ color: 'var(--cor-texto)' }}>
+              {produto.nome}
+            </h1>
 
             <div className="mt-4 flex items-center gap-3 text-sm">
               <Estrela className="w-5 h-5 text-amber-400" />
-              <span className="font-semibold text-[#13233c]">{avaliacao}</span>
-              <span className="text-[#888]">({avaliacoes} avaliações)</span>
-            </div>
-
-            <div className="mt-6 flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full bg-[#13233c] flex items-center justify-center text-white font-bold">
-                {produto.nome.charAt(0)}
-              </div>
-              <div>
-                <p className="font-semibold text-[#222]">Grafica 3D Store</p>
-                <p className="text-xs text-[#888]">Modelos exclusivos impressos sob demanda</p>
-              </div>
-              <button
-                onClick={() => setSeguindo(!seguindo)}
-                className={`ml-auto px-5 py-2 rounded-full text-sm border transition-colors cursor-pointer ${
-                  seguindo
-                    ? 'bg-[#13233c] text-white border-[#13233c]'
-                    : 'bg-transparent text-[#13233c] border-[#13233c] hover:bg-[#13233c] hover:text-white'
-                }`}
-              >
-                {seguindo ? 'Seguindo' : 'Seguir'}
-              </button>
+              <span className="font-semibold" style={{ color: 'var(--cor-texto)' }}>
+                4,8
+              </span>
+              <span style={{ color: 'var(--cor-texto-suave)' }}>(127 avaliações)</span>
             </div>
 
             <div className="mt-6 flex items-end gap-3">
-              <p className="text-4xl font-bold text-[#13233c]">R$ {preco.toFixed(2).replace('.', ',')}</p>
-              <p className="text-xs text-[#888] mb-2">produção sob demanda</p>
+              <p className="text-4xl font-bold" style={{ color: 'var(--cor-primaria)' }}>
+                R$ {produto.preco.toFixed(2).replace('.', ',')}
+              </p>
+              <p className="text-xs mb-2" style={{ color: 'var(--cor-texto-suave)' }}>
+                produção sob demanda
+              </p>
             </div>
+
+            <div className="mt-5 flex items-center gap-4">
+              <span className="text-sm font-medium" style={{ color: 'var(--cor-texto)' }}>
+                Quantidade
+              </span>
+              <div
+                className="flex items-center gap-4 rounded-full px-4 py-2"
+                style={{ border: `1px solid var(--cor-borda)`, background: 'var(--cor-fundo-cartao)' }}
+              >
+                <button
+                  onClick={diminuir}
+                  disabled={quantidade <= 1}
+                  className="w-7 h-7 rounded-full cursor-pointer border-none text-lg font-bold disabled:opacity-40"
+                  style={{ background: 'var(--cor-primaria-suave)', color: 'var(--cor-primaria)' }}
+                >
+                  −
+                </button>
+                <span className="text-lg font-semibold w-6 text-center" style={{ color: 'var(--cor-texto)' }}>
+                  {quantidade}
+                </span>
+                <button
+                  onClick={aumentar}
+                  disabled={quantidade >= produto.estoque}
+                  className="w-7 h-7 rounded-full cursor-pointer border-none text-lg font-bold disabled:opacity-40"
+                  style={{ background: 'var(--cor-primaria-suave)', color: 'var(--cor-primaria)' }}
+                >
+                  +
+                </button>
+              </div>
+              <span className="text-xs" style={{ color: 'var(--cor-texto-suave)' }}>
+                {produto.estoque} em estoque
+              </span>
+            </div>
+
+            {produto.permiteUpload && (
+              <div
+                className="mt-6 rounded-2xl p-5"
+                style={{ border: `1px dashed var(--cor-primaria)`, background: 'var(--cor-primaria-suave)' }}
+              >
+                <p className="text-sm font-medium" style={{ color: 'var(--cor-texto)' }}>
+                  📎 Personalize esta peça
+                </p>
+                <p className="mt-1 text-xs" style={{ color: 'var(--cor-texto-suave)' }}>
+                  Envie o arquivo com a frase, nome, imagem ou logo que você quer na peça.
+                </p>
+                <label
+                  className="mt-3 inline-block px-4 py-2 rounded-lg text-white text-sm font-medium cursor-pointer"
+                  style={{ background: 'var(--cor-primaria)' }}
+                >
+                  Escolher arquivo
+                  <input type="file" className="hidden" onChange={handleArquivo} accept=".png,.jpg,.jpeg,.svg,.pdf,.stl" />
+                </label>
+                {arquivo && (
+                  <p className="mt-3 text-xs flex items-center gap-2" style={{ color: 'var(--cor-primaria)' }}>
+                    <Check className="w-4 h-4" />
+                    {arquivo.name} ({(arquivo.size / 1024).toFixed(0)} KB)
+                  </p>
+                )}
+              </div>
+            )}
 
             <div className="mt-6 flex gap-3">
               <button
-                onClick={() => setNoCarrinho(true)}
-                className="flex-1 flex items-center justify-center gap-2 border-none bg-[#13233c] text-white py-4 rounded-xl cursor-pointer text-lg font-medium transition-all duration-300 hover:bg-[#1f3a62] hover:scale-[1.02] hover:shadow-[0_10px_25px_rgba(19,35,60,0.35)]"
+                onClick={() => {
+                  if (esgotado) return
+                  onAdicionarAoCarrinho(produto, quantidade)
+                }}
+                disabled={esgotado}
+                className="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl text-white text-lg font-medium cursor-pointer transition-all duration-300 hover:scale-[1.02] border-none disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ background: 'var(--cor-primaria)', boxShadow: '0 10px 25px rgba(0,0,0,0.2)' }}
               >
                 {noCarrinho ? <Check className="w-5 h-5" /> : <Carrinho className="w-5 h-5" />}
-                {noCarrinho ? 'Adicionado ao carrinho' : 'Comprar agora'}
+                {noCarrinho ? `Adicionado — R$ ${precoTotal.toFixed(2).replace('.', ',')}` : 'Comprar agora'}
               </button>
               <button
-                onClick={onVoltar}
-                className="px-6 border-2 border-[#13233c] text-[#13233c] py-3.5 rounded-xl cursor-pointer text-lg font-medium transition-all duration-300 hover:bg-[#13233c] hover:text-white"
+                onClick={onAssinar}
+                className="px-6 py-3.5 rounded-xl text-lg font-medium cursor-pointer transition-all duration-300 border-none"
+                style={{ background: 'var(--cor-fundo-cartao)', color: 'var(--cor-primaria)', border: '2px solid var(--cor-primaria)' }}
               >
-                Personalizar
-              </button>
-              <button className="w-[52px] border-2 border-[#13233c] text-[#13233c] rounded-xl cursor-pointer flex items-center justify-center transition-all duration-300 hover:bg-[#13233c] hover:text-white">
-                <Coracao className="w-5 h-5" />
+                Assinar
               </button>
             </div>
 
             {noCarrinho && (
-              <p className="mt-3 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg py-2 px-4 text-center">
+              <p
+                className="mt-3 text-sm py-2 px-4 text-center rounded-lg"
+                style={{ background: 'var(--cor-primaria-suave)', color: 'var(--cor-primaria)' }}
+              >
                 Item adicionado ao carrinho com sucesso!
               </p>
             )}
 
             <div className="mt-6 grid grid-cols-2 gap-3">
-              <SpecCard icon={<Impressora className="w-5 h-5" />} label="Material" value={info.specs.material} />
-              <SpecCard icon={<Camada className="w-5 h-5" />} label="Peças" value={info.specs.pecas} />
-              <SpecCard icon={<Relogio className="w-5 h-5" />} label="Tempo de impressão" value={info.specs.tempo} />
-              <SpecCard icon={<Download className="w-5 h-5" />} label="Arquivo" value="STL pronto" />
+              {[
+                { icone: <Download className="w-5 h-5" />, label: 'Arquivo', valor: produto.permiteUpload ? 'Você envia o seu' : 'Modelo pronto' },
+                { icone: <Camada className="w-5 h-5" />, label: 'Acabamento', valor: 'Alta qualidade' },
+                { icone: <Relogio className="w-5 h-5" />, label: 'Produção', valor: '5 a 10 dias' },
+                { icone: <Check className="w-5 h-5" />, label: 'Garantia', valor: 'Revisão manual' },
+              ].map((spec) => (
+                <div
+                  key={spec.label}
+                  className="flex items-center gap-3 rounded-xl px-4 py-3"
+                  style={{ background: 'var(--cor-fundo-suave)' }}
+                >
+                  <span style={{ color: 'var(--cor-primaria)' }}>{spec.icone}</span>
+                  <div>
+                    <p className="text-xs" style={{ color: 'var(--cor-texto-suave)' }}>
+                      {spec.label}
+                    </p>
+                    <p className="text-sm font-semibold" style={{ color: 'var(--cor-texto)' }}>
+                      {spec.valor}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        <div className="mt-14 bg-white rounded-[18px] shadow-[0_6px_18px_rgba(0,0,0,0.08)] p-8">
-          <h2 className="text-2xl font-[Georgia,serif] text-[#13233c] mb-4">Descrição do modelo</h2>
-          <p className="text-[#444] leading-relaxed whitespace-pre-line">{info.descricao}</p>
-          <p className="mt-4 text-[#888] text-sm">
-            Cada modelo é impresso e montado à mão, com revisão de qualidade antes do envio.
+        <div
+          className="mt-14 rounded-[18px] p-8"
+          style={{ background: 'var(--cor-fundo-cartao)', border: '1px solid var(--cor-borda)' }}
+        >
+          <h2 className="text-2xl font-[Georgia,serif] mb-4" style={{ color: 'var(--cor-texto)' }}>
+            Descrição da peça
+          </h2>
+          <p className="leading-relaxed whitespace-pre-line" style={{ color: 'var(--cor-texto)' }}>
+            {produto.descricao}
           </p>
-
-          <div className="mt-6 flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <span
-                key={tag}
-                className="bg-[#f0efe9] text-[#13233c] text-sm px-4 py-1.5 rounded-full cursor-pointer hover:bg-[#13233c] hover:text-white transition-colors"
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
+          <p className="mt-4 text-sm" style={{ color: 'var(--cor-texto-suave)' }}>
+            Cada peça é impressa e revisada à mão antes do envio. Enviamos para todo o Brasil.
+          </p>
         </div>
 
         <div className="mt-14 mb-10">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-[Georgia,serif] text-[#13233c]">Modelos relacionados</h2>
-            <button onClick={onVoltar} className="text-[#13233c] underline text-sm cursor-pointer">
-              Ver mais
+            <h2 className="text-2xl font-[Georgia,serif]" style={{ color: 'var(--cor-texto)' }}>
+              Outras peças de {genero?.nome}
+            </h2>
+            <button
+              onClick={onVoltar}
+              className="text-sm underline cursor-pointer border-none bg-transparent"
+              style={{ color: 'var(--cor-primaria)' }}
+            >
+              Ver todas
             </button>
           </div>
           <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-[30px]">
@@ -238,15 +251,20 @@ function ProdutoDetalhe({ produto, onVoltar, onSelecionar }) {
                 id={p.id}
                 nome={p.nome}
                 imagem={p.imagem}
-                categoria={p.categoria}
+                preco={p.preco}
+                estoque={p.estoque}
+                tipo={p.tipo}
+                permiteUpload={p.permiteUpload}
                 onClick={() => onSelecionar(p)}
+                favorito={favoritos.some((f) => f.id === p.id)}
+                onToggleFavorito={() => onToggleFavorito(p)}
               />
             ))}
           </div>
         </div>
       </div>
     </section>
-  );
+  )
 }
 
-export default ProdutoDetalhe;
+export default ProdutoDetalhe
