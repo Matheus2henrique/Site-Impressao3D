@@ -19,15 +19,15 @@ function Footer({ onHome, onSelecionarGenero, onAssinar, onIrParaDestaques }) {
       className="mt-auto"
       style={{ background: 'var(--cor-fundo-suave)' }}
     >
-      <div className="max-w-[1400px] mx-auto px-6 py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:divide-x divide-[var(--cor-borda)]">
-        <div>
+      <div className="max-w-[1400px] mx-auto px-6 py-8 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:divide-x divide-[var(--cor-borda)]">
+        <div className="col-span-2 lg:col-span-1">
           <button onClick={onHome} className="border-none bg-transparent cursor-pointer flex items-center">
             <span
               className="flex items-center leading-none"
               style={{ fontFamily: 'Cinzel, Georgia, serif', color: 'var(--cor-texto)' }}
             >
               <span className="font-bold" style={{ fontSize: '36px' }}>L</span>
-              <img src="/logo.jpeg" alt="" className="h-9 w-9 rounded-full object-cover mx-0.5" />
+              <img src={`${import.meta.env.BASE_URL}logo.jpeg`} alt="" className="h-9 w-9 rounded-full object-cover mx-0.5" />
               <span className="font-bold" style={{ fontSize: '36px' }}>cus</span>
             </span>
           </button>
@@ -57,6 +57,21 @@ function Footer({ onHome, onSelecionarGenero, onAssinar, onIrParaDestaques }) {
 
         <div>
           <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider" style={{ color: 'var(--cor-texto)' }}>
+            Ajuda
+          </h4>
+          <ul className="flex flex-col gap-3 list-none">
+            {['Perguntas frequentes', 'Trocas e devoluções', 'Política de privacidade'].map((ajuda) => (
+              <li key={ajuda}>
+                <a href="#" className="text-sm " style={{ color: 'var(--cor-texto-suave)' }}>
+                  {ajuda}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider" style={{ color: 'var(--cor-texto)' }}>
             Navegue
           </h4>
           <ul className="flex flex-col gap-3 list-none">
@@ -79,21 +94,6 @@ function Footer({ onHome, onSelecionarGenero, onAssinar, onIrParaDestaques }) {
 
         <div>
           <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider" style={{ color: 'var(--cor-texto)' }}>
-            Ajuda
-          </h4>
-          <ul className="flex flex-col gap-3 list-none">
-            {['Perguntas frequentes', 'Trocas e devoluções', 'Política de privacidade'].map((ajuda) => (
-              <li key={ajuda}>
-                <a href="#" className="text-sm " style={{ color: 'var(--cor-texto-suave)' }}>
-                  {ajuda}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider" style={{ color: 'var(--cor-texto)' }}>
             Contato
           </h4>
           <ul className="flex flex-col gap-3 text-sm list-none" style={{ color: 'var(--cor-texto-suave)' }}>
@@ -103,7 +103,7 @@ function Footer({ onHome, onSelecionarGenero, onAssinar, onIrParaDestaques }) {
           </ul>
         </div>
 
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <h4 className="text-sm font-semibold mb-4" style={{ color: 'var(--cor-texto)' }}>
             Receba novidades e ofertas exclusivas!
           </h4>

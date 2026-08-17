@@ -1,8 +1,41 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { generos } from '../data/produtos'
 
 function Header({ generoId, onSelecionarGenero, onHome, onAssinar, onMostrarPerfil, totalCarrinho = 0, onMostrarCarrinho, totalFavoritos = 0, onMostrarFavoritos }) {
   const [menuAberto, setMenuAberto] = useState(false)
+  const [buscando, setBuscando] = useState(false)
+  const [busca, setBusca] = useState('')
+  const buscaRef = useRef(null)
+
+  const sugestoes = useMemo(() => {
+    const alvo = busca
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+    if (!alvo) return []
+    const normalizar = (s) =>
+      s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    return generos.filter(
+      (g) => normalizar(g.nome).includes(alvo) || g.id.includes(alvo)
+    )
+  }, [busca])
+
+  useEffect(() => {
+    if (!buscando) return
+    function fechar(e) {
+      if (buscaRef.current && !buscaRef.current.contains(e.target)) setBuscando(false)
+    }
+    document.addEventListener('mousedown', fechar)
+    return () => document.removeEventListener('mousedown', fechar)
+  }, [buscando])
+
+  function confirmarBusca(genero) {
+    if (!genero) return
+    setBuscando(false)
+    setBusca('')
+    navegar(() => onSelecionarGenero(genero.id))
+  }
 
   function navegar(acao) {
     setMenuAberto(false)
@@ -29,7 +62,7 @@ function Header({ generoId, onSelecionarGenero, onHome, onAssinar, onMostrarPerf
           >
             <span className="font-bold" style={{ fontSize: 'clamp(28px, 5vw, 44px)' }}>L</span>
             <img
-              src="public/logo.jpeg"
+              src={`${import.meta.env.BASE_URL}logo.jpeg`}
               alt=""
               className="h-9 w-9 md:h-11 md:w-11 rounded-full object-cover mx-0.5"
             />
@@ -67,18 +100,24 @@ function Header({ generoId, onSelecionarGenero, onHome, onAssinar, onMostrarPerf
         </nav>
 
         <div className="flex gap-3 md:gap-4 items-center">
-          <img
-            className="hidden md:block w-7 h-7 md:w-8 md:h-8"
-            src="https://cdn-icons-png.flaticon.com/256/64/64673.png"
-            alt="Buscar"
-            style={{ filter: 'invert(0)' }}
-          />
+          <button
+            className="bg-transparent border-none p-0 cursor-pointer"
+            onClick={() => setBuscando(true)}
+            aria-label="Buscar universos"
+            aria-expanded={buscando}
+          >
+            <img
+              className="header-icon-lupa w-7 h-7 md:w-8 md:h-8"
+              src="https://cdn-icons-png.flaticon.com/256/64/64673.png"
+              alt="Buscar"
+            />
+          </button>
           <button
             className="relative bg-transparent border-none p-0 cursor-pointer"
             onClick={onMostrarFavoritos}
             aria-label="Meus favoritos"
           >
-            <svg viewBox="0 0 24 24" className="w-7 h-7 md:w-8 md:h-8" aria-hidden="true">
+            <svg viewBox="0 0 24 24" className="header-icon-heart w-7 h-7 md:w-8 md:h-8" aria-hidden="true">
               {totalFavoritos > 0 ? (
                 <path
                   d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
@@ -107,7 +146,7 @@ function Header({ generoId, onSelecionarGenero, onHome, onAssinar, onMostrarPerf
             onClick={onMostrarPerfil}
             aria-label="Perfil"
           >
-            <img className="w-7 h-7 md:w-8 md:h-8" src="https://cdn-icons-png.flaticon.com/512/3106/3106921.png" alt="Perfil" />
+            <img className="header-icon-perfil w-7 h-7 md:w-8 md:h-8" src="https://cdn-icons-png.flaticon.com/512/3106/3106921.png" alt="Perfil" />
           </button>
           <button
             className="relative bg-transparent border-none p-0 cursor-pointer"
@@ -115,7 +154,7 @@ function Header({ generoId, onSelecionarGenero, onHome, onAssinar, onMostrarPerf
             aria-label="Carrinho"
           >
             <img
-              className="w-7 h-7 md:w-8 md:h-8"
+              className="header-icon-carrinho w-7 h-7 md:w-8 md:h-8"
               src="https://cdn-icons-png.flaticon.com/512/4202/4202388.png"
               alt="Carrinho"
             />
@@ -149,6 +188,57 @@ function Header({ generoId, onSelecionarGenero, onHome, onAssinar, onMostrarPerf
         </div>
       </div>
 
+      {buscando && (
+        <div
+          ref={buscaRef}
+          className="absolute top-full left-0 right-0 border-b shadow-xl"
+          style={{ background: 'var(--cor-fundo-cartao)', borderColor: 'var(--cor-borda)' }}
+        >
+          <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-4">
+            <div
+              className="flex items-center gap-2 rounded-xl border px-3"
+              style={{ borderColor: 'var(--cor-borda)', background: 'var(--cor-fundo-suave)' }}
+            >
+              <img className="header-icon-lupa w-5 h-5" src="https://cdn-icons-png.flaticon.com/256/64/64673.png" alt="" />
+              <input
+                autoFocus
+                type="text"
+                placeholder="Pesquise um universo (ex.: romance, fantasia, suspense)"
+                value={busca}
+                onChange={(e) => setBusca(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && sugestoes.length > 0) confirmarBusca(sugestoes[0])
+                  if (e.key === 'Escape') setBuscando(false)
+                }}
+                className="flex-1 min-w-0 bg-transparent border-none outline-none py-2 text-sm"
+                style={{ color: 'var(--cor-texto)' }}
+              />
+            </div>
+            {busca.trim() && (
+              <ul className="mt-2 list-none">
+                {sugestoes.length > 0 ? (
+                  sugestoes.map((genero) => (
+                    <li key={genero.id}>
+                      <button
+                        onClick={() => confirmarBusca(genero)}
+                        className="w-full text-left px-3 py-2.5 rounded-lg bg-transparent border-none cursor-pointer text-sm hover:opacity-70"
+                        style={{ color: 'var(--cor-texto)' }}
+                      >
+                        {genero.nome}
+                      </button>
+                    </li>
+                  ))
+                ) : (
+                  <li className="px-3 py-2 text-sm" style={{ color: 'var(--cor-texto-suave)' }}>
+                    Nenhum universo encontrado.
+                  </li>
+                )}
+              </ul>
+            )}
+          </div>
+        </div>
+      )}
+
       {menuAberto && (
         <div
           className="fixed inset-0 z-50 lg:hidden"
@@ -181,7 +271,7 @@ function Header({ generoId, onSelecionarGenero, onHome, onAssinar, onMostrarPerf
                 style={{ fontFamily: 'Cinzel, Georgia, serif', color: 'var(--cor-texto)' }}
               >
                 <span className="font-bold" style={{ fontSize: '32px' }}>L</span>
-                <img src="/logo.jpeg" alt="" className="h-8 w-8 rounded-full object-cover mx-0.5" />
+                <img src={`${import.meta.env.BASE_URL}logo.jpeg`} alt="" className="h-8 w-8 rounded-full object-cover mx-0.5" />
                 <span className="font-bold" style={{ fontSize: '32px' }}>cus</span>
               </span>
               <button

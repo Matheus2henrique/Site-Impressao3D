@@ -82,6 +82,16 @@ footer {
   border-color: #000;
 }
 
+.tema-suspense .header-icon-lupa,
+.tema-suspense .header-icon-perfil,
+.tema-suspense .header-icon-carrinho {
+  filter: invert(1);
+}
+
+.tema-suspense .header-icon-heart path {
+  stroke: #e2e8f0;
+}
+
 .fantasy-sidebar {
   position: absolute;
   top: 0;
