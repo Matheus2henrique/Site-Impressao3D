@@ -29,7 +29,7 @@ function Header({ generoId, onSelecionarGenero, onHome, onAssinar, onMostrarPerf
           >
             <span className="font-bold" style={{ fontSize: 'clamp(28px, 5vw, 44px)' }}>L</span>
             <img
-              src="/logo.jpeg"
+              src="public/logo.jpeg"
               alt=""
               className="h-9 w-9 md:h-11 md:w-11 rounded-full object-cover mx-0.5"
             />

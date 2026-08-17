@@ -7,5 +7,5 @@ export default defineConfig({
   server: {
     historyApiFallback: true,
   },
-  base: '/',
+  base: '/Site-Impressao3D/',
 })
