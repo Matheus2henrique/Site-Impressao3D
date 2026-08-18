@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import Card from './Card'
 import Reveal from './Reveal'
-import Particulas from './Particulas'
 import { produtos } from '../data/produtos'
 import { Check } from './Icones'
 import bannerRomance from '../assets/banner-romance.jpeg'
@@ -81,7 +80,6 @@ function Genero({ genero, onSelecionarProduto, onAssinar, favoritos, onToggleFav
             style={{ background: overlayFundo }}
           />
         )}
-        <Particulas genero={genero.id} />
         <div className="relative z-10">
           
           <h1 className="text-5xl md:text-6xl font-[Georgia,serif]" style={{ color: imagemFundo ? '#fff' : 'var(--cor-texto)' }}>
@@ -97,11 +95,11 @@ function Genero({ genero, onSelecionarProduto, onAssinar, favoritos, onToggleFav
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {opcoes.map((opcao, i) => (
             <Reveal key={opcao.id} delay={i * 90} className="h-full">
-              <button
+<button
                 onClick={opcao.acao}
-                className="text-left rounded-[20px] p-7 cursor-pointer transition-all duration-700 hover:-translate-y-1 shadow-[0_10px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_18px_40px_rgba(0,0,0,0.2)]"
-              style={{ background: 'var(--cor-fundo-cartao)', border: '1px solid var(--cor-borda)' }}
-            >
+                className="text-left rounded-[20px] p-7 cursor-pointer transition-all duration-700 hover:-translate-y-1 shadow-[0_10px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_18px_40px_rgba(0,0,0,0.2)] h-full w-full flex flex-col"
+                style={{ background: 'var(--cor-fundo-cartao)', border: '1px solid var(--cor-borda)' }}
+              >
               <span
                 className="w-12 h-12 rounded-full flex items-center justify-center text-2xl mb-4"
                 style={{ background: 'var(--cor-primaria-suave)' }}
@@ -111,7 +109,7 @@ function Genero({ genero, onSelecionarProduto, onAssinar, favoritos, onToggleFav
               <h3 className="text-xl font-semibold" style={{ color: 'var(--cor-texto)' }}>
                 {opcao.titulo}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--cor-texto-suave)' }}>
+              <p className="mt-2 text-sm leading-relaxed flex-1" style={{ color: 'var(--cor-texto-suave)' }}>
                 {opcao.descricao}
               </p>
               {opcao.id === 'clube' && (

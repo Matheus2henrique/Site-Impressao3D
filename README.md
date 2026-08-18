@@ -1,17 +1,37 @@
-# MVP Gráfica 3D
+# Locus — Loja de Impressão 3D (MVP)
 
-**Loja virtual (MVP) de modelos impressos em 3D sob demanda.** Catálogo de chaveiros, colecionáveis, itens para casa (household) e materiais educacionais, com filtros por categoria, página de detalhes do produto, especificações técnicas, preços e carrinho.
+**Loja virtual (MVP) de peças impressas em 3D sob demanda.** Catálogo por universos (Romance, Fantasia e Suspense), página de detalhes do produto, carrinho, checkout com pagamento (simulado ou Mercado Pago), favoritos e área de perfil com autenticação.
 
-> Projeto em desenvolvimento — MVP funcional construído para validar a ideia de vender modelos 3D personalizados produzidos sob demanda.
+> Projeto em desenvolvimento — MVP funcional para validar a venda de modelos 3D personalizados produzidos sob demanda.
+
+---
+
+## Índice
+
+- [Funcionalidades](#-funcionalidades)
+- [Tecnologias](#-tecnologias)
+- [Estrutura do projeto](#-estrutura-do-projeto)
+- [Como rodar o projeto](#-como-rodar-o-projeto)
+- [Pagamento real com Mercado Pago](#-pagamento-real-com-mercado-pago)
+- [Endpoints da API](#-endpoints-da-api)
+- [Scripts](#-scripts)
+- [Normas e boas práticas](#-normas-e-boas-práticas)
+- [Próximos passos](#-próximos-passos)
+- [Licença](#-licença)
+
+---
 
 ## ✨ Funcionalidades
 
-- 🏷️ **Catálogo com filtros** — navegue por categorias: Todos, Chaveiros, Colecionáveis, Household e Educacional
-- 📄 **Página de detalhes** — preço, avaliação, curtidas, downloads, salvamentos e especificações (material, peças, tempo de impressão, arquivo)
-- 🛒 **Carrinho** — botão "Comprar agora" com feedback de item adicionado
-- 👤 **Perfil** — área do usuário com navegação integrada
+- 🏷️ **Catálogo por universos** — Romance, Fantasia e Suspense, com filtro e página de detalhes
+- 📄 **Página de detalhes** — preço, estoque, descrição, personalização com upload de arquivo e "Comprar agora"
+- 🛒 **Carrinho** — adicionar, remover e alterar quantidade
+- 💳 **Checkout** — dados de entrega + pagamento (cartão ou Pix), com redirecionamento ao **Mercado Pago** quando o gateway está ativo
+- ❤️ **Favoritos** — persistidos no banco quando o usuário está logado
+- 👤 **Perfil** — criar conta, entrar e consultar os dados no banco (`/api/auth/perfil`)
+- 🔑 **Autenticação** — JWT + bcrypt no backend (senha nunca armazenada em texto puro)
+- 🔄 **Navegação fluida** — rolagem suave e URLs amigáveis
 - 🎨 **Design responsivo** — layout adaptável a diferentes tamanhos de tela
-- 🔄 **Navegação fluida** — rolagem suave entre seções e filtros
 
 ## 🧰 Tecnologias
 
@@ -24,50 +44,56 @@
 | [Express](https://expressjs.com) | 4.x | API do backend |
 | [PostgreSQL](https://www.postgresql.org) | 15/16/17 | Banco de dados (driver `pg`) |
 | [JWT](https://jwt.io) + bcrypt | — | Autenticação de usuários |
+| [Mercado Pago](https://www.mercadopago.com.br/developers) | API v1 | Pagamento (checkout + webhook) |
 
 ## 📁 Estrutura do projeto
 
 ```
 MVP-grafica/
-├── frontend/                  # Aplicação React + Vite
+├── frontend/                    # Aplicação React + Vite
 │   ├── index.html
 │   ├── package.json
 │   ├── vite.config.js
 │   ├── eslint.config.js
 │   └── src/
-│       ├── main.jsx           # Entry point
-│       ├── App.jsx            # Componente raiz e navegação
-│       ├── index.css          # Estilos globais (Tailwind)
-│       ├── api.js             # Cliente HTTP do backend (fetch + token)
-│       ├── data/
-│       │   └── produtos.js    # Dados dos produtos (mock)
-│       ├── assets/            # Recursos estáticos
+│       ├── main.jsx             # Entry point
+│       ├── App.jsx              # Componente raiz e navegação
+│       ├── index.css            # Estilos globais (Tailwind)
+│       ├── api.js               # Cliente HTTP do backend (fetch + token)
+│       ├── data/produtos.js     # Dados dos produtos (mock)
 │       └── components/
-│           ├── Header.jsx
-│           ├── Banner.jsx
-│           ├── Catalogo.jsx
-│           ├── Card.jsx
+│           ├── Header.jsx       # Topo + menu
+│           ├── Entrada.jsx      # Home
+│           ├── Genero.jsx       # Catálogo de um universo
+│           ├── Card.jsx         # Card de produto
 │           ├── ProdutoDetalhe.jsx
-│           ├── Perfil.jsx
+│           ├── Carrinho.jsx     # Carrinho + checkout
+│           ├── Perfil.jsx       # Login / registro / dados da conta
+│           ├── Favoritos.jsx
+│           ├── ClubeLocus.jsx   # Assinatura (planos)
+│           ├── Footer.jsx
 │           └── Icones.jsx
-├── backend/                   # API Express + PostgreSQL
+├── backend/                     # API Express + PostgreSQL
 │   ├── package.json
-│   ├── .env                   # ← CONEXÃO COM SEU BANCO AQUI
-│   ├── .env.example
+│   ├── .env                     # ← CONEXÃO COM SEU BANCO + TOKEN DO MERCADO PAGO
+│   ├── .env.example             # Modelo de configuração
 │   └── src/
-│       ├── server.js          # Servidor Express
-│       ├── db.js              # Pool do PostgreSQL
-│       ├── schema.sql         # Criação das tabelas
-│       ├── migrate.js         # Aplica o schema (npm run migrate)
-│       ├── seed.js            # Popula produtos (npm run seed)
-│       ├── middleware/auth.js # Proteção por token JWT
-│       ├── data/produtos.js   # Dados iniciais dos produtos
+│       ├── server.js            # Servidor Express
+│       ├── db.js                # Pool do PostgreSQL
+│       ├── schema.sql           # Criação das tabelas
+│       ├── migrate.js           # Aplica o schema (npm run migrate)
+│       ├── seed.js              # Popula produtos (npm run seed)
+│       ├── middleware/auth.js   # Proteção por token JWT
+│       ├── services/
+│       │   └── mercadoPago.js   # Integração com a API do Mercado Pago
+│       ├── data/produtos.js     # Dados iniciais dos produtos
 │       └── routes/
-│           ├── auth.js        # registrar, login, perfil
-│           ├── produtos.js    # catálogo
-│           ├── favoritos.js   # favoritos por usuário
-│           ├── pedidos.js     # checkout com pagamento + estoque
-│           └── assinaturas.js # Clube Locus
+│           ├── auth.js          # registrar, login, perfil
+│           ├── produtos.js      # catálogo
+│           ├── favoritos.js     # favoritos por usuário
+│           ├── pedidos.js       # checkout com pagamento + estoque
+│           ├── assinaturas.js   # Clube Locus
+│           └── pagamentos.js    # preferência + webhook do Mercado Pago
 └── package-lock.json
 ```
 
@@ -77,58 +103,64 @@ MVP-grafica/
 
 - [Node.js](https://nodejs.org) **20.x ou superior** (recomendado)
 - npm (incluído com o Node.js)
+- [PostgreSQL](https://www.postgresql.org/download/) instalado e rodando (porta padrão `5432`)
 
-### Passo a passo
+### 1. Frontend (React + Vite)
 
 ```bash
-# 1. Acesse a pasta do frontend
 cd frontend
-
-# 2. Instale as dependências
 npm install
-
-# 3. Inicie o servidor de desenvolvimento
-npm run dev
+npm run dev        # http://localhost:5173
 ```
 
-Abra o endereço exibido no terminal (por padrão `http://localhost:5173`) no seu navegador.
+### 2. Backend (Express + PostgreSQL)
 
-### Rodando o backend (PostgreSQL)
+**a) Configure o banco** — edite `backend/.env` com os dados do seu PostgreSQL:
 
-1. **Configure o banco**: edite o arquivo `backend/.env` com os dados do seu PostgreSQL
-   (host, porta, usuário, senha e nome do banco). Exemplo:
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=SUA_SENHA
+DB_NAME=locus
+```
 
+**b) Instale as dependências, crie as tabelas e popule os produtos:**
+
+```bash
+cd backend
+npm install
+npm run migrate   # cria as tabelas (usuarios, clientes, produtos, pedidos, favoritos, assinaturas)
+npm run seed      # insere os 18 produtos do catálogo
+```
+
+**c) Inicie o servidor:**
+
+```bash
+npm run dev       # http://localhost:4000
+```
+
+> O frontend já está ligado à API (login, cadastro, favoritos e finalização de compra).
+> Em produção, defina `VITE_API_URL` no frontend apontando para a URL da API.
+
+## 💳 Pagamento real com Mercado Pago
+
+Sem configuração, o checkout é **simulado**: cria o pedido, marca como `pago` e baixa o estoque na hora, **sem cobrar ninguém**.
+
+Para cobrar de verdade, siga o passo a passo completo em **[Normas.md](./Normas.md)**. Resumo:
+
+1. Crie uma aplicação em [mercadopago.com.br/developers](https://www.mercadopago.com.br/developers) e copie o **Access Token**
+2. No `backend/.env`, preencha:
    ```env
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_USER=postgres
-   DB_PASSWORD=SUA_SENHA
-   DB_NAME=locus
+   MP_ACCESS_TOKEN=APP_USR-xxxxxxxxxxxxxxxx
+   BACKEND_URL=http://localhost:4000   # URL pública (ex.: túnel ngrok em testes)
    ```
+3. Ao finalizar a compra, o cliente é redirecionado para o checkout do Mercado Pago (Pix, cartão ou boleto)
+4. O webhook `POST /api/pagamentos/webhook` confirma o pagamento; só então o pedido vira `pago` e o estoque é baixado
 
-2. **Instale as dependências** (dentro de `backend/`):
+> Com o gateway ativo, os dados do cartão **não** passam pelo seu servidor — o Mercado Pago processa o pagamento diretamente.
 
-   ```bash
-   cd backend
-   npm install
-   ```
-
-3. **Crie as tabelas** e **popule os produtos**:
-
-   ```bash
-   npm run migrate   # cria as tabelas (usuarios, produtos, pedidos, favoritos, assinaturas...)
-   npm run seed      # insere os 18 produtos do catálogo
-   ```
-
-4. **Inicie o servidor**:
-
-   ```bash
-   npm run dev       # http://localhost:4000
-   ```
-
-O frontend já está ligado à API (login, cadastro, favoritos e finalização de compra).
-
-### Endpoints da API
+## 🔌 Endpoints da API
 
 | Método | Rota | Descrição | Autenticação |
 |---|---|---|---|
@@ -148,41 +180,33 @@ O frontend já está ligado à API (login, cadastro, favoritos e finalização d
 | `POST` | `/api/assinaturas` | Ativa assinatura do Clube Locus | Token |
 | `GET` | `/api/assinaturas` | Lista assinaturas do usuário | Token |
 
-### Pagamento real com Mercado Pago
+## 📜 Scripts
 
-Sem configuração, o checkout é **simulado** (cria o pedido e baixa o estoque na hora, sem cobrar).
-Para cobrar de verdade:
-
-1. Crie uma aplicação em https://www.mercadopago.com.br/developers e copie o **Access Token**
-2. No `backend/.env`, preencha:
-   ```env
-   MP_ACCESS_TOKEN=APP_USR-xxxxxxxxxxxxxxxx
-   BACKEND_URL=http://localhost:4000   # URL pública (ex.: via túnel ngrok em testes)
-   ```
-3. Ao finalizar a compra, o cliente é redirecionado para o checkout do Mercado Pago (Pix, cartão ou boleto)
-4. O webhook `POST /api/pagamentos/webhook` confirma o pagamento; só então o pedido vira `pago` e o estoque é baixado
-
-> Com o gateway ativo, os dados do cartão **não** passam pelo seu servidor — o Mercado Pago processa o pagamento diretamente.
-
-### Scripts disponíveis
+### Frontend (`frontend/`)
 
 | Comando | Descrição |
 |---|---|
-| `npm run dev` | Inicia o servidor de desenvolvimento com hot reload |
-| `npm run build` | Gera a versão de produção na pasta `dist/` |
-| `npm run preview` | Pré-visualiza a build de produção localmente |
-| `npm run lint` | Executa o ESLint para verificar o código |
+| `npm run dev` | Inicia o dev server com hot reload |
+| `npm run build` | Gera a versão de produção em `dist/` |
+| `npm run preview` | Pré-visualiza a build de produção |
+| `npm run lint` | Executa o ESLint |
 
-### Build de produção
+### Backend (`backend/`)
 
-```bash
-npm run build
-npm run preview
-```
+| Comando | Descrição |
+|---|---|
+| `npm run dev` | Inicia o servidor com hot reload (porta `4000`) |
+| `npm run start` | Inicia o servidor em produção |
+| `npm run migrate` | Aplica o schema no PostgreSQL |
+| `npm run seed` | Popula produtos (só se a tabela estiver vazia) |
 
-## 📸 Screenshots
+## 📐 Normas e boas práticas
 
-> Em breve — adicione aqui capturas de tela do catálogo e da página de detalhes.
+Consulte **[Normas.md](./Normas.md)** para:
+
+- Como **criar** e **configurar** a API do **Mercado Pago** (token, credenciais de teste, webhook, ngrok)
+- Como o **banco de dados** está estruturado (tabelas, migração, seed, backup)
+- Regras de segurança (senha, JWT, `.env`, dados de cartão, webhook)
 
 ## 🗺️ Próximos passos
 
@@ -191,9 +215,11 @@ npm run preview
 - [x] Favoritos persistidos por usuário
 - [x] Checkout com pagamento e baixa de estoque
 - [x] Assinaturas do Clube Locus (API)
+- [x] Estrutura do gateway Mercado Pago (preferência + webhook)
+- [ ] Ativar gateway com credenciais reais do Mercado Pago
+- [ ] Validar assinatura do webhook (`x-signature`)
 - [ ] Integrar assinatura na tela do Clube Locus
-- [ ] Carrinho completo com pagamento real (gateway)
-- [ ] Personalização de cores e detalhes dos modelos
+- [ ] Consumir `/api/produtos` no frontend (hoje o catálogo usa mock)
 - [ ] Upload de modelos customizados pelos usuários
 - [ ] Login com Google no backend
 
