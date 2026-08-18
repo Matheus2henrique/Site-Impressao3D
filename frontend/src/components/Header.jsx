@@ -100,7 +100,7 @@ function Header({ generoId, onSelecionarGenero, onHome, onAssinar, onMostrarPerf
         </nav>
 
         <div className="flex gap-3 md:gap-4 items-center">
-          <button
+<button
             className="bg-transparent border-none p-0 cursor-pointer"
             onClick={() => setBuscando(true)}
             aria-label="Buscar universos"
@@ -126,8 +126,8 @@ function Header({ generoId, onSelecionarGenero, onHome, onAssinar, onMostrarPerf
               ) : (
                 <path
                   d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                  fill="none"
-                  stroke="#000000"
+fill="none"
+                  stroke="var(--cor-texto)"
                   strokeWidth="2"
                 />
               )}
@@ -146,7 +146,7 @@ function Header({ generoId, onSelecionarGenero, onHome, onAssinar, onMostrarPerf
             onClick={onMostrarPerfil}
             aria-label="Perfil"
           >
-            <img className="header-icon-perfil w-7 h-7 md:w-8 md:h-8" src="https://cdn-icons-png.flaticon.com/512/3106/3106921.png" alt="Perfil" />
+<img className="header-icon-perfil w-7 h-7 md:w-8 md:h-8" src="https://cdn-icons-png.flaticon.com/512/3106/3106921.png" alt="Perfil" />
           </button>
           <button
             className="relative bg-transparent border-none p-0 cursor-pointer"
@@ -154,7 +154,7 @@ function Header({ generoId, onSelecionarGenero, onHome, onAssinar, onMostrarPerf
             aria-label="Carrinho"
           >
             <img
-              className="header-icon-carrinho w-7 h-7 md:w-8 md:h-8"
+className="header-icon-carrinho w-7 h-7 md:w-8 md:h-8"
               src="https://cdn-icons-png.flaticon.com/512/4202/4202388.png"
               alt="Carrinho"
             />

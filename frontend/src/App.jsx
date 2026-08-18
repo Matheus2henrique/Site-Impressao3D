@@ -9,6 +9,21 @@ import Perfil from './components/Perfil'
 import Favoritos from './components/Favoritos'
 import CarrinhoDrawer from './components/Carrinho'
 import { generos, produtos } from './data/produtos'
+import { api, obterToken } from './api'
+
+function normalizarProduto(p) {
+  return {
+    id: p.id,
+    nome: p.nome,
+    genero: p.genero,
+    tipo: p.tipo,
+    preco: Number(p.preco),
+    estoque: p.estoque,
+    permiteUpload: p.permite_upload,
+    descricao: p.descricao,
+    imagem: p.imagem,
+  }
+}
 
 const BASE = '/locus'
 
@@ -79,6 +94,14 @@ function App() {
     return () => window.removeEventListener('popstate', sincronizar)
   }, [])
 
+  useEffect(() => {
+    if (!obterToken()) return
+    api.favoritos
+      .listar()
+      .then((lista) => setFavoritos(lista.map(normalizarProduto)))
+      .catch(() => {})
+  }, [])
+
   function handleSelecionarGenero(id) {
     navegar({ generoId: id, pagina: 'genero' })
   }
@@ -108,11 +131,17 @@ function App() {
   }
 
   function toggleFavorito(produto) {
-    setFavoritos((atual) =>
-      atual.some((item) => item.id === produto.id)
-        ? atual.filter((item) => item.id !== produto.id)
-        : [...atual, produto]
-    )
+    const jaFavorito = favoritos.some((item) => item.id === produto.id)
+    const aplicar = (atual) =>
+      jaFavorito ? atual.filter((item) => item.id !== produto.id) : [...atual, produto]
+
+    setFavoritos(aplicar)
+    if (!obterToken()) return
+
+    const promessa = jaFavorito
+      ? api.favoritos.remover(produto.id)
+      : api.favoritos.adicionar(produto.id)
+    promessa.catch(() => setFavoritos(aplicar))
   }
 
   function handleVoltarDoPerfil() {
@@ -156,6 +185,12 @@ function App() {
 
   function handleFecharCarrinho() {
     setMostrarCarrinho(false)
+  }
+
+  async function handleFinalizar(dados) {
+    const pedido = await api.criarPedido(dados)
+    setCarrinho([])
+    return pedido
   }
 
   function handleIrParaDestaques() {
@@ -222,13 +257,15 @@ function App() {
         />
       )}
 
-      <CarrinhoDrawer
-        itens={carrinho}
-        aberto={mostrarCarrinho}
-        onFechar={handleFecharCarrinho}
-        onRemover={handleRemoverDoCarrinho}
-        onAlterar={handleAlterarQuantidade}
-      />
+      {mostrarCarrinho && (
+        <CarrinhoDrawer
+          itens={carrinho}
+          onFechar={handleFecharCarrinho}
+          onRemover={handleRemoverDoCarrinho}
+          onAlterar={handleAlterarQuantidade}
+          onFinalizar={handleFinalizar}
+        />
+      )}
 
       {!mostrarPerfil && !mostrarFavoritos && (
         <Footer

@@ -19,8 +19,8 @@ function Footer({ onHome, onSelecionarGenero, onAssinar, onIrParaDestaques }) {
       className="mt-auto"
       style={{ background: 'var(--cor-fundo-suave)' }}
     >
-      <div className="max-w-[1400px] mx-auto px-6 py-8 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:divide-x divide-[var(--cor-borda)]">
-        <div className="col-span-2 lg:col-span-1">
+      <div className="max-w-[1400px] mx-auto px-6 py-8 grid grid-cols-2 lg:grid-cols-6 gap-8 lg:divide-x divide-[var(--cor-borda)]">
+        <div className="order-1 col-span-2 lg:col-span-1">
           <button onClick={onHome} className="border-none bg-transparent cursor-pointer flex items-center">
             <span
               className="flex items-center leading-none"
@@ -36,7 +36,7 @@ function Footer({ onHome, onSelecionarGenero, onAssinar, onIrParaDestaques }) {
           </p>
         </div>
 
-        <div>
+        <div className="order-2">
           <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider" style={{ color: 'var(--cor-texto)' }}>
             Universos
           </h4>
@@ -55,7 +55,7 @@ function Footer({ onHome, onSelecionarGenero, onAssinar, onIrParaDestaques }) {
           </ul>
         </div>
 
-        <div>
+        <div className="order-4 lg:order-3">
           <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider" style={{ color: 'var(--cor-texto)' }}>
             Ajuda
           </h4>
@@ -78,21 +78,36 @@ function Footer({ onHome, onSelecionarGenero, onAssinar, onIrParaDestaques }) {
             <li>
               <button
                 onClick={onAssinar}
-                className="bg-transparent border-none cursor-pointer text-sm "
+                className="bg-transparent border-none cursor-pointer text-sm text-left"
                 style={{ color: 'var(--cor-texto-suave)' }}
               >
                 Clube Locus
               </button>
             </li>
             <li>
-              <button onClick={onIrParaDestaques} className="bg-transparent border-none cursor-pointer text-sm " style={{ color: 'var(--cor-texto-suave)' }}>
+              <button onClick={onIrParaDestaques} className="bg-transparent border-none cursor-pointer text-sm text-left" style={{ color: 'var(--cor-texto-suave)' }}>
                 Produtos em Destaque
               </button>
             </li>
           </ul>
         </div>
 
-        <div>
+        <div className="order-3 lg:order-4">
+          <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider" style={{ color: 'var(--cor-texto)' }}>
+            Ajuda
+          </h4>
+          <ul className="flex flex-col gap-3 list-none">
+            {['Perguntas frequentes', 'Trocas e devoluções', 'Política de privacidade'].map((ajuda) => (
+              <li key={ajuda}>
+                <a href="#" className="text-sm " style={{ color: 'var(--cor-texto-suave)' }}>
+                  {ajuda}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="order-5">
           <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider" style={{ color: 'var(--cor-texto)' }}>
             Contato
           </h4>
@@ -103,7 +118,7 @@ function Footer({ onHome, onSelecionarGenero, onAssinar, onIrParaDestaques }) {
           </ul>
         </div>
 
-        <div className="col-span-2 lg:col-span-1">
+        <div className="order-6 col-span-2 lg:col-span-1">
           <h4 className="text-sm font-semibold mb-4" style={{ color: 'var(--cor-texto)' }}>
             Receba novidades e ofertas exclusivas!
           </h4>

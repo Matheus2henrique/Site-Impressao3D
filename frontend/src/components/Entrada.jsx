@@ -1,4 +1,5 @@
 import Card from './Card'
+import Reveal from './Reveal'
 import { generos, produtos } from '../data/produtos'
 import { Check } from './Icones'
 
@@ -12,15 +13,24 @@ function Entrada({ onSelecionarGenero, onAssinar, onSelecionarProduto, favoritos
       <div className="min-h-[380px] md:min-h-[420px] flex flex-col items-center justify-center text-center px-5 md:px-6"
         style={{ background: 'var(--fundo-decorativo)' }}
       >
-        <span className="tracking-[8px] text-xs md:text-sm" style={{ color: 'var(--cor-texto-suave)' }}>
+        <span
+          className="tracking-[8px] text-xs md:text-sm"
+          style={{ color: 'var(--cor-texto-suave)', animation: 'aparecer 0.7s ease-out 0.12s both' }}
+        >
           PARA QUEM VIVE DENTRO DOS LIVROS
         </span>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl leading-[0.95] my-5 font-[Georgia,serif]" style={{ color: 'var(--cor-texto)' }}>
+        <h1
+          className="text-4xl sm:text-5xl md:text-6xl leading-[0.95] my-5 font-[Georgia,serif]"
+          style={{ color: 'var(--cor-texto)', animation: 'aparecer 0.7s ease-out 0.28s both' }}
+        >
           Locus — onde suas
           <br />
           histórias ganham forma
         </h1>
-        <p className="text-lg sm:text-xl max-w-[560px]" style={{ color: 'var(--cor-texto-suave)' }}>
+        <p
+          className="text-lg sm:text-xl max-w-[560px]"
+          style={{ color: 'var(--cor-texto-suave)', animation: 'aparecer 0.7s ease-out 0.44s both' }}
+        >
           Decorações, colecionáveis e o Clube Locus para os leitores que querem
           levar o seu gênero favorito para todos os cantos.
         </p>
@@ -35,12 +45,12 @@ function Entrada({ onSelecionarGenero, onAssinar, onSelecionarProduto, favoritos
         </p>
 
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-          {generos.map((genero) => (
-            <button
-              key={genero.id}
-              onClick={() => onSelecionarGenero(genero.id)}
-              className="group relative h-[340px] overflow-hidden rounded-[24px] cursor-pointer border-none text-left shadow-[0_10px_30px_rgba(0,0,0,0.15)]"
-            >
+          {generos.map((genero, i) => (
+            <Reveal key={genero.id} delay={i * 90} className="h-full">
+              <button
+                onClick={() => onSelecionarGenero(genero.id)}
+                className="group relative h-[340px] overflow-hidden rounded-[24px] cursor-pointer border-none text-left shadow-[0_10px_30px_rgba(0,0,0,0.15)]"
+              >
               <img
                 src={genero.imagem}
                 alt={genero.nome}
@@ -59,16 +69,17 @@ function Entrada({ onSelecionarGenero, onAssinar, onSelecionarProduto, favoritos
                 </span>
               </div>
             </button>
+            </Reveal>
           ))}
         </div>
 
         <div className="mt-16 flex flex-wrap justify-center gap-6 sm:gap-10">
-          {generos.map((genero) => (
-            <button
-              key={genero.id}
-              onClick={() => onSelecionarGenero(genero.id)}
-              className="group flex flex-col items-center cursor-pointer border-none bg-transparent"
-            >
+          {generos.map((genero, i) => (
+            <Reveal key={genero.id} delay={i * 90}>
+              <button
+                onClick={() => onSelecionarGenero(genero.id)}
+                className="group flex flex-col items-center cursor-pointer border-none bg-transparent"
+              >
               <span className="relative w-24 h-24 sm:w-34 sm:h-34 md:w-[11.4rem] md:h-[11.4rem] rounded-full overflow-hidden transition-all duration-700 group-hover:scale-110 group-hover:-translate-y-1 shadow-[0_10px_30px_rgba(0,0,0,0.18)] group-hover:shadow-[0_18px_45px_rgba(0,0,0,0.28)]">
                 <img
                   src={genero.imagem}
@@ -86,7 +97,8 @@ function Entrada({ onSelecionarGenero, onAssinar, onSelecionarProduto, favoritos
               >
                 {genero.nome}
               </span>
-            </button>
+              </button>
+            </Reveal>
           ))}
         </div>
 
@@ -108,21 +120,22 @@ function Entrada({ onSelecionarGenero, onAssinar, onSelecionarProduto, favoritos
             </div>
           </div>
 
-          <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-[30px]">
-            {destaque.map((produto) => (
-              <Card
-                key={produto.id}
-                id={produto.id}
-                nome={produto.nome}
-                imagem={produto.imagem}
-                preco={produto.preco}
-                estoque={produto.estoque}
-                tipo={produto.tipo}
-                permiteUpload={produto.permiteUpload}
-                onClick={() => onSelecionarProduto(produto)}
-                favorito={favoritos.some((f) => f.id === produto.id)}
-                onToggleFavorito={() => onToggleFavorito(produto)}
-              />
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[30px]">
+            {destaque.map((produto, i) => (
+              <Reveal key={produto.id} delay={i * 90}>
+                <Card
+                  id={produto.id}
+                  nome={produto.nome}
+                  imagem={produto.imagem}
+                  preco={produto.preco}
+                  estoque={produto.estoque}
+                  tipo={produto.tipo}
+                  permiteUpload={produto.permiteUpload}
+                  onClick={() => onSelecionarProduto(produto)}
+                  favorito={favoritos.some((f) => f.id === produto.id)}
+                  onToggleFavorito={() => onToggleFavorito(produto)}
+                />
+              </Reveal>
             ))}
           </div>
         </div>

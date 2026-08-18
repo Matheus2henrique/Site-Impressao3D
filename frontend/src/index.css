@@ -129,3 +129,46 @@ footer {
   background: var(--cor-primaria);
   color: #fff;
 }
+
+.header-icon {
+  filter: none;
+}
+
+.tema-suspense .header-icon {
+  filter: invert(1);
+}
+
+@keyframes flutuar {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-45vh) translateX(24px) rotate(15deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-85vh) translateX(-18px) rotate(-15deg);
+    opacity: 0;
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particula {
+    display: none;
+  }
+}

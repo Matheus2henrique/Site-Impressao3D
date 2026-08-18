@@ -1,4 +1,5 @@
 import Card from './Card'
+import Reveal from './Reveal'
 import { SetaEsquerda } from './Icones'
 
 function Favoritos({ favoritos, onVoltar, onSelecionarProduto, onToggleFavorito }) {
@@ -47,20 +48,21 @@ function Favoritos({ favoritos, onVoltar, onSelecionarProduto, onToggleFavorito 
           </div>
         ) : (
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[30px]">
-            {favoritos.map((produto) => (
-              <Card
-                key={produto.id}
-                id={produto.id}
-                nome={produto.nome}
-                imagem={produto.imagem}
-                preco={produto.preco}
-                estoque={produto.estoque}
-                tipo={produto.tipo}
-                permiteUpload={produto.permiteUpload}
-                favorito
-                onClick={() => onSelecionarProduto(produto)}
-                onToggleFavorito={() => onToggleFavorito(produto)}
-              />
+            {favoritos.map((produto, i) => (
+              <Reveal key={produto.id} delay={i * 90}>
+                <Card
+                  id={produto.id}
+                  nome={produto.nome}
+                  imagem={produto.imagem}
+                  preco={produto.preco}
+                  estoque={produto.estoque}
+                  tipo={produto.tipo}
+                  permiteUpload={produto.permiteUpload}
+                  favorito
+                  onClick={() => onSelecionarProduto(produto)}
+                  onToggleFavorito={() => onToggleFavorito(produto)}
+                />
+              </Reveal>
             ))}
           </div>
         )}

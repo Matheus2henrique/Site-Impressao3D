@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Card from './Card'
+import Reveal from './Reveal'
 import { generos, produtos } from '../data/produtos'
 import {
   Estrela,
@@ -245,20 +246,21 @@ function ProdutoDetalhe({ produto, onVoltar, onSelecionar, onAssinar, onAdiciona
             </button>
           </div>
           <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-[30px]">
-            {relacionados.map((p) => (
-              <Card
-                key={p.id}
-                id={p.id}
-                nome={p.nome}
-                imagem={p.imagem}
-                preco={p.preco}
-                estoque={p.estoque}
-                tipo={p.tipo}
-                permiteUpload={p.permiteUpload}
-                onClick={() => onSelecionar(p)}
-                favorito={favoritos.some((f) => f.id === p.id)}
-                onToggleFavorito={() => onToggleFavorito(p)}
-              />
+            {relacionados.map((p, i) => (
+              <Reveal key={p.id} delay={i * 90}>
+                <Card
+                  id={p.id}
+                  nome={p.nome}
+                  imagem={p.imagem}
+                  preco={p.preco}
+                  estoque={p.estoque}
+                  tipo={p.tipo}
+                  permiteUpload={p.permiteUpload}
+                  onClick={() => onSelecionar(p)}
+                  favorito={favoritos.some((f) => f.id === p.id)}
+                  onToggleFavorito={() => onToggleFavorito(p)}
+                />
+              </Reveal>
             ))}
           </div>
         </div>

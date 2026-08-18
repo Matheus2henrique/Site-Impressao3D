@@ -1,16 +1,12 @@
 import { useState } from 'react'
 import Card from './Card'
+import Reveal from './Reveal'
+import Particulas from './Particulas'
 import { produtos } from '../data/produtos'
-import { Flor, Castelo, Detetive, Check } from './Icones'
+import { Check } from './Icones'
 import bannerRomance from '../assets/banner-romance.jpeg'
 import bannerFantasia from '../assets/banner-fantasia.jpeg'
 import bannerSuspense from '../assets/banner-suspense.jpeg'
-
-const ICONES_GENERO = {
-  romance: Flor,
-  fantasia: Castelo,
-  suspense: Detetive,
-}
 
 const FILTROS = [
   { id: 'todos', nome: 'Todas as peças' },
@@ -20,8 +16,6 @@ const FILTROS = [
 
 function Genero({ genero, onSelecionarProduto, onAssinar, favoritos, onToggleFavorito }) {
   const [filtroTipo, setFiltroTipo] = useState('todos')
-
-  const IconeGenero = ICONES_GENERO[genero.id] || Flor
 
   const produtosDoGenero = produtos.filter((p) => p.genero === genero.id)
   const produtosFiltrados =
@@ -87,12 +81,9 @@ function Genero({ genero, onSelecionarProduto, onAssinar, favoritos, onToggleFav
             style={{ background: overlayFundo }}
           />
         )}
+        <Particulas genero={genero.id} />
         <div className="relative z-10">
-          <span className="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto"
-            style={{ background: 'var(--cor-primaria)', color: '#fff' }}
-          >
-            <IconeGenero className="w-9 h-9" />
-          </span>
+          
           <h1 className="text-5xl md:text-6xl font-[Georgia,serif]" style={{ color: imagemFundo ? '#fff' : 'var(--cor-texto)' }}>
             Universo {genero.nome}
           </h1>
@@ -104,11 +95,11 @@ function Genero({ genero, onSelecionarProduto, onAssinar, favoritos, onToggleFav
 
       <div className="max-w-[1200px] mx-auto px-6 -mt-10 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {opcoes.map((opcao) => (
-            <button
-              key={opcao.id}
-              onClick={opcao.acao}
-              className="text-left rounded-[20px] p-7 cursor-pointer transition-all duration-700 hover:-translate-y-1 shadow-[0_10px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_18px_40px_rgba(0,0,0,0.2)]"
+          {opcoes.map((opcao, i) => (
+            <Reveal key={opcao.id} delay={i * 90} className="h-full">
+              <button
+                onClick={opcao.acao}
+                className="text-left rounded-[20px] p-7 cursor-pointer transition-all duration-700 hover:-translate-y-1 shadow-[0_10px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_18px_40px_rgba(0,0,0,0.2)]"
               style={{ background: 'var(--cor-fundo-cartao)', border: '1px solid var(--cor-borda)' }}
             >
               <span
@@ -128,10 +119,11 @@ function Genero({ genero, onSelecionarProduto, onAssinar, favoritos, onToggleFav
                   style={{ color: 'var(--cor-primaria)' }}
                 >
                   <Check className="w-4 h-4" />
-                  Benefícios exclusivos
-                </span>
+                    Benefícios exclusivos
+                  </span>
               )}
-            </button>
+              </button>
+            </Reveal>
           ))}
         </div>
       </div>
@@ -167,20 +159,21 @@ function Genero({ genero, onSelecionarProduto, onAssinar, favoritos, onToggleFav
         </div>
 
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {produtosFiltrados.map((produto) => (
-            <Card
-              key={produto.id}
-              id={produto.id}
-              nome={produto.nome}
-              imagem={produto.imagem}
-              preco={produto.preco}
-              estoque={produto.estoque}
-              tipo={produto.tipo}
-              permiteUpload={produto.permiteUpload}
-              onClick={() => onSelecionarProduto(produto)}
-              favorito={favoritos.some((f) => f.id === produto.id)}
-              onToggleFavorito={() => onToggleFavorito(produto)}
-            />
+          {produtosFiltrados.map((produto, i) => (
+            <Reveal key={produto.id} delay={i * 90}>
+              <Card
+                id={produto.id}
+                nome={produto.nome}
+                imagem={produto.imagem}
+                preco={produto.preco}
+                estoque={produto.estoque}
+                tipo={produto.tipo}
+                permiteUpload={produto.permiteUpload}
+                onClick={() => onSelecionarProduto(produto)}
+                favorito={favoritos.some((f) => f.id === produto.id)}
+                onToggleFavorito={() => onToggleFavorito(produto)}
+              />
+            </Reveal>
           ))}
         </div>
 
